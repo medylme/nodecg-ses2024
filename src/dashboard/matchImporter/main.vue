@@ -65,10 +65,10 @@ function saveToDatabase() {
     <div class="q-pa-md flex flex-row gap-4 items-center justify-center">
       <QInput class="w-64" filled v-model="matchUrl" label="Match ID" />
       <div class="q-pa-md flex flex-row gap-4">
-        <QSelect class="w-36" @update:modelValue="newValue => teamRedSelection = newValue" v-model="teamRedSelection"
-          :options="teamArray" label="Team Red" />
         <QSelect class="w-36" @update:modelValue="newValue => teamBlueSelection = newValue" v-model="teamBlueSelection"
           :options="teamArray" label="Team Blue" />
+        <QSelect class="w-36" @update:modelValue="newValue => teamRedSelection = newValue" v-model="teamRedSelection"
+          :options="teamArray" label="Team Red" />
       </div>
     </div>
     <div class="flex flex-row gap-4">
