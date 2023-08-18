@@ -1,11 +1,11 @@
+/* eslint-disable @typescript-eslint/no-var-requires */
 /* eslint-disable max-len */
 /* eslint-disable import/no-extraneous-dependencies */
 /* eslint-disable @typescript-eslint/indent */
 import { Team, Map } from '@nodecg-vue-ts-template/types/osu';
 import { get as nodecg } from './util/nodecg';
 import { currentTeamsReplicant } from './util/replicants';
-// import { exampleReplicant } from './util/replicants';
-// eslint-disable-next-line @typescript-eslint/no-var-requires
+
 const sqlite3 = require('sqlite3').verbose();
 
 const db = new sqlite3.Database('db/wah2023.sqlite3');

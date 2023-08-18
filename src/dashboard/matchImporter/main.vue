@@ -1,15 +1,5 @@
 <script setup lang="ts">
-import { Configschema } from '@nodecg-vue-ts-template/types/schemas';
-import { useReplicant } from 'nodecg-vue-composable';
 import { Ref, ref } from 'vue';
-
-/*
-// Access the bundle configuration with types.
-const config = nodecg.bundleConfig as Configschema;
-
-// Accessing normal types.
-const exampleType: ExampleType = { exampleProperty: 'exampleString' };
-*/
 
 interface Team {
   id: number;

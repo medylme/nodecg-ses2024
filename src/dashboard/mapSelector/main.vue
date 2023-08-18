@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { Configschema } from '@nodecg-vue-ts-template/types/schemas';
 import { useReplicant } from 'nodecg-vue-composable';
 import { ref } from 'vue';
 import { Rounds } from '../../types/osu';
@@ -22,14 +21,6 @@ function getPoolTitle(code: Rounds): string {
       return 'Unknown';
   }
 }
-
-/*
-// Access the bundle configuration with types.
-const config = nodecg.bundleConfig as Configschema;
-
-// Accessing normal types.
-const exampleType: ExampleType = { exampleProperty: 'exampleString' };
-*/
 
 // Pools
 

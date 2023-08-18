@@ -1,6 +1,5 @@
 <!-- eslint-disable import/no-extraneous-dependencies -->
 <script setup lang="ts">
-import { useReplicant } from 'nodecg-vue-composable';
 import ReconnectingWebSocket from 'reconnecting-websocket';
 import Vue3Odometer from 'vue3-odometer';
 import 'odometer/themes/odometer-theme-default.css';
