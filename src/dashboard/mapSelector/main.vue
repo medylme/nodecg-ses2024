@@ -216,8 +216,8 @@ function saveToProgram(pool: string, map: string) {
 </script>
 
 <template>
-  <div class="column">
-    <div>
+  <div class="flex items-center justify-center">
+    <div class="">
       <p>
         Current Pool: <span class="text-bold">{{ currentPoolStringReplicant?.data }}</span>
         <br />

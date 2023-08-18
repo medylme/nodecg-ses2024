@@ -4,6 +4,7 @@ import '@quasar/extras/roboto-font/roboto-font.css';
 import { createHead } from '@vueuse/head';
 import { Dark, Quasar } from 'quasar';
 import 'quasar/dist/quasar.css';
+import '../tailwindImport.css';
 import { createApp } from 'vue';
 import App from './mapSelector/main.vue';
 
