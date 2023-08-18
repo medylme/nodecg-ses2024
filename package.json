@@ -85,12 +85,6 @@
         "title": "Match Importer",
         "file": "matchImporter.html",
         "width": 4
-      },
-      {
-        "name": "upcomingEditor",
-        "title": "Upcoming Panel Editor",
-        "file": "upcomingEditor.html",
-        "width": 3
       }
     ],
     "graphics": [
@@ -103,11 +97,6 @@
         "file": "showcaseReplayer.html",
         "width": 500,
         "height": 750
-      },
-      {
-        "file": "upcomingPanel.html",
-        "width": 1920,
-        "height": 1080
       }
     ]
   }
