@@ -78,21 +78,21 @@
     "dashboardPanels": [
       {
         "name": "mapSelector",
-        "title": "Pool/Map Selector",
+        "title": "Now Playing Control",
         "file": "mapSelector.html",
         "width": 2
-      },
-      {
-        "name": "matchImporter",
-        "title": "Match Importer",
-        "file": "matchImporter.html",
-        "width": 4
       },
       {
         "name": "teamComparison",
         "title": "Team Comparison Control",
         "file": "teamComparison.html",
         "width": 3
+      },
+      {
+        "name": "matchImporter",
+        "title": "Match Importer",
+        "file": "matchImporter.html",
+        "width": 4
       }
     ],
     "graphics": [
