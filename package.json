@@ -87,6 +87,12 @@
         "title": "Match Importer",
         "file": "matchImporter.html",
         "width": 4
+      },
+      {
+        "name": "teamComparison",
+        "title": "Team Comparison Control",
+        "file": "teamComparison.html",
+        "width": 3
       }
     ],
     "graphics": [
