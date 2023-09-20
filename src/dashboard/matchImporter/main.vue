@@ -1,10 +1,6 @@
 <script setup lang="ts">
+import { Team } from '@nodecg-vue-ts-template/types/schemas';
 import { Ref, ref } from 'vue';
-
-interface Team {
-  id: number;
-  name: string;
-}
 
 const currentTeamsReplicant = nodecg.Replicant<Team[]>('currentTeamsReplicant');
 
@@ -14,12 +10,8 @@ const matchUrl = ref('');
 
 const teamArray: Ref<string[]> = ref([]);
 function refreshTeams() {
-  if (currentTeamsReplicant.value === undefined) {
-    throw new Error('currentTeamsReplicant is undefined');
-  }
-
   const newArray: string[] = [];
-  currentTeamsReplicant.value.forEach((team) => {
+  currentTeamsReplicant?.value?.forEach((team) => {
     newArray.push(team.name);
   });
 

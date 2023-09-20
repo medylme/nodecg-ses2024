@@ -1,10 +1,31 @@
 <script setup lang="ts">
 import { useReplicant } from 'nodecg-vue-composable';
 import { Ref, ref } from 'vue';
+import { Pools } from '@nodecg-vue-ts-template/types/schemas';
+import { Rounds } from '../../types/osu';
 
 interface Team {
   id: number;
   name: string;
+}
+
+function getPoolTitle(code: Rounds): string {
+  switch (code) {
+    case 'QL':
+      return 'Qualifiers';
+    case 'RO16':
+      return 'Round of 16';
+    case 'QF':
+      return 'Quarterfinals';
+    case 'SF':
+      return 'Semifinals';
+    case 'F':
+      return 'Finals';
+    case 'GF':
+      return 'Grand Finals';
+    default:
+      return 'Unknown';
+  }
 }
 
 // Get Teams
@@ -23,28 +44,42 @@ function refreshTeams() {
   teamArray.value = newArray;
 }
 
+// Current Pool Code
+const currentComparisonPoolReplicant = useReplicant<string>(
+  'currentComparisonPool',
+  'wah2023',
+  {
+    defaultValue: 'Qualifiers',
+  },
+);
+
+const currentPoolsReplicant = useReplicant<Pools>(
+  'poolsReplicant',
+  'wah2023',
+);
+const pools = currentPoolsReplicant?.data as Pools;
+
+const poolOptions = Object.keys(pools).map((pool) => ({
+  label: pool,
+  value: pool,
+}));
+const selectedPoolModel = ref(currentComparisonPoolReplicant?.data as Rounds);
+const selectedPool = ref(currentComparisonPoolReplicant?.data as Rounds);
+
 // Current Comparisons
 const currentComparisonsReplicant = useReplicant<Team[]>(
   'currentComparisons',
   'wah2023',
-  {
-    defaultValue: [
-      currentTeamsReplicant.value?.find((team) => team.id === 1) as Team,
-      currentTeamsReplicant.value?.find((team) => team.id === 2) as Team,
-    ],
-  },
 );
-if (currentComparisonsReplicant === undefined || currentComparisonsReplicant.data === undefined) {
-  throw new Error('currentComparisonsReplicant is undefined');
-}
+
 const teamBlueSelectionName = ref('');
 const teamRedSelectionName = ref('');
-const teamBlueName = ref(currentComparisonsReplicant.data[0]?.name);
-const teamRedName = ref(currentComparisonsReplicant.data[1]?.name);
+const teamBlueName = ref(currentComparisonsReplicant?.data?.[0]?.name);
+const teamRedName = ref(currentComparisonsReplicant?.data?.[1]?.name);
 
 function updateTeams(blueTeamName: string, redTeamName: string) {
-  if (currentComparisonsReplicant === undefined) {
-    throw new Error('currentComparisonsReplicant is undefined');
+  if (currentComparisonsReplicant === undefined || currentComparisonPoolReplicant === undefined) {
+    return;
   }
 
   const teamBlue = currentTeamsReplicant.value?.find((team) => team.name === blueTeamName) as Team;
@@ -59,8 +94,13 @@ function updateTeams(blueTeamName: string, redTeamName: string) {
   currentComparisonsReplicant.data = [teamBlue, teamRed];
   currentComparisonsReplicant.save();
 
+  currentComparisonPoolReplicant.data = getPoolTitle(selectedPool.value as Rounds);
+  currentComparisonPoolReplicant.save();
+
   teamBlueName.value = currentComparisonsReplicant.data[0]?.name;
   teamRedName.value = currentComparisonsReplicant.data[1]?.name;
+
+  nodecg.sendMessage('updateComparisonTeams', '1');
 }
 
 </script>
@@ -68,10 +108,13 @@ function updateTeams(blueTeamName: string, redTeamName: string) {
 <template>
   <div class="flex justify-center items-center">
     <section class="flex flex-col">
+      <p>Current Comparison Pool: <span class="text-bold">{{ currentComparisonPoolReplicant?.data }}</span></p>
       <p>Current Team Blue: <span class="text-bold">{{ teamBlueName }}</span></p>
       <p>Current Team Red: <span class="text-bold">{{ teamRedName }}</span></p>
     </section>
     <section class="q-pa-md flex flex-row gap-4 items-end justify-center">
+      <QSelect class="grow" filled @update:modelValue="newValue => selectedPool = newValue.value"
+        v-model="selectedPoolModel" :options="poolOptions" label="Comparison Pool" stack-label />
       <div class="q-pa-md flex flex-row gap-4">
         <QSelect class="w-36" v-model="teamBlueSelectionName" :options="teamArray" label="Team Blue" />
         <QSelect class="w-36" v-model="teamRedSelectionName" :options="teamArray" label="Team Red" />

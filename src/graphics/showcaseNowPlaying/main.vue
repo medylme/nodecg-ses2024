@@ -19,19 +19,16 @@ const currentPoolStringReplicant = useReplicant<string>(
     defaultValue: '...',
   },
 );
-if (currentMapReplicant === undefined || currentPoolCodeReplicant === undefined || currentPoolCodeReplicant.data === undefined || currentPoolStringReplicant === undefined) {
-  throw new Error('currentMapReplicant is undefined');
-}
 
 </script>
 
 <template>
   <div id="container">
     <p class="mapdata" id="map">
-      {{ currentMapReplicant.data }}
+      {{ currentMapReplicant?.data }}
     </p>
     <p class="mapdata" id="pool">
-      {{ currentPoolStringReplicant.data }}
+      {{ currentPoolStringReplicant?.data }}
     </p>
   </div>
 </template>

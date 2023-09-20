@@ -15,12 +15,6 @@ if (apiKey === undefined) {
   throw new Error("osu! API key not found! Please set it in the .env file as 'OSU_API_KEY'.");
 }
 
-// - INITIALIZATION
-
-if (currentTeamsReplicant === undefined) {
-  throw new Error('currentTeamsReplicant is undefined!');
-}
-
 // osu api
 async function testApiKey() {
   const endpoint = `https://osu.ppy.sh/api/get_user?k=${apiKey}&u=1`;
@@ -38,10 +32,6 @@ testApiKey().then((data) => {
 });
 
 // Generate teams replicant
-if (currentTeamsReplicant === undefined) {
-  throw new Error('currentTeamsReplicant is undefined!');
-}
-
 const getTeams = async () => {
   const teamArray: Team[] = [];
 
