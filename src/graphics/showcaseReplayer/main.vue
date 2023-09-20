@@ -14,6 +14,7 @@ const misses = ref(0);
 const maxcombo = ref(0);
 const acc = ref(0);
 const score = ref(0);
+const scoreV1String = ref('');
 
 // send websocket request
 const socket = new ReconnectingWebSocket('ws://localhost:24050/ws');
@@ -52,26 +53,31 @@ socket.onmessage = (event) => {
     const accFormula = (accFormulaTop / accFormulaBottom) * 100;
     acc.value = Number(accFormula.toFixed(2));
   }
+  if (!data.resultsScreen.mods.str.includes('V2')) {
+    scoreV1String.value = '(V1)';
+  } else {
+    scoreV1String.value = '';
+  }
 };
 
 </script>
 
 <template>
   <div id="container" class="column q-ma-lg items-center justify-center">
-    <div class="column items-center justify-center">
+    <div class="flex gap-2 items-center justify-center">
       <div class="column items-center justify-center">
-        <h3 class="q-mx-none q-my-md">replay by</h3>
+        <h3 class="q-mx-none q-my-md bg-[#fbb03b] text-[#31272c] text-3xl py-2 px-4 rounded-xl">replayer</h3>
         <p class="text-h4">{{ replayerName }}</p>
       </div>
       <div class="row items-start justify-start q-mx-sm">
         <div class="q-mx-lg column items-center justify-center">
-          <h4 class="q-mx-md q-my-md">300</h4>
+          <h4 class="q-mx-md q-my-md bg-[#fbb03b] text-[#31272c] text-3xl py-2 px-4 rounded-xl">300</h4>
           <p class="text-h4">
             <Vue3Odometer format='d' class="o-text" :value="amount300" />
           </p>
         </div>
         <div class="q-mx-lg column items-center justify-center">
-          <h4 class="q-mx-md q-my-md">100</h4>
+          <h4 class="q-mx-md q-my-md bg-[#fbb03b] text-[#31272c] text-3xl py-2 px-4 rounded-xl">100</h4>
           <p class="text-h4">
             <Vue3Odometer format='d' class="o-text" :value="amount100" />
           </p>
@@ -79,34 +85,35 @@ socket.onmessage = (event) => {
       </div>
       <div class="row items-start justify-start q-mx-sm">
         <div class="q-mx-lg column items-center justify-center">
-          <h4 class="q-mx-md q-my-md">50</h4>
+          <h4 class="q-mx-md q-my-md bg-[#fbb03b] text-[#31272c] text-3xl py-2 px-4 rounded-xl">50</h4>
           <p class="text-h4">
             <Vue3Odometer format='d' class="o-text" :value="amount50" />
           </p>
         </div>
         <div class="q-mx-lg column items-center justify-center">
-          <h4 class="q-mx-md q-my-md">miss</h4>
+          <h4 class="q-mx-md q-my-md bg-[#fbb03b] text-[#31272c] text-3xl py-2 px-4 rounded-xl">miss</h4>
           <p class="text-h4">
             <Vue3Odometer format='d' class="o-text" :value="misses" />
           </p>
         </div>
       </div>
       <div class="row items-start justify-start q-mx-sm">
-        <div class="q-mx-lg column items-center justify-center">
-          <h4 class="q-my-md">combo</h4>
+        <div class="q-mx-xl column items-center justify-center">
+          <h4 class="q-my-md bg-[#fbb03b] text-[#31272c] text-3xl py-2 px-4 rounded-xl">combo</h4>
           <p class="text-h4">
             <Vue3Odometer format='d' class="o-text" :value="maxcombo" />
           </p>
         </div>
-        <div class="q-mx-lg column items-center justify-center">
-          <h4 class="q-my-md">acc</h4>
+        <div class="q-mx-xl column items-center justify-center">
+          <h4 class="q-my-md bg-[#fbb03b] text-[#31272c] text-3xl py-2 px-4 rounded-xl">acc</h4>
           <p class="text-h4">
             <Vue3Odometer class="o-text" :value="acc" />%
           </p>
         </div>
       </div>
       <div class="column items-center justify-center q-mx-lg">
-        <h4 class="q-mx-none q-my-md">score</h4>
+        <h4 class="q-mx-none q-my-md bg-[#fbb03b] text-[#31272c] text-3xl py-2 px-4 rounded-xl">score {{ scoreV1String }}
+        </h4>
         <p class="text-h4">
           <Vue3Odometer class="o-text" :value="score" />
         </p>
