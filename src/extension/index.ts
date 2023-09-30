@@ -16,5 +16,4 @@ export = (nodecg: NodeCG): void => {
    */
   set(nodecg);
   require('./osuApiStuff');
-  require('./pools');
 };
