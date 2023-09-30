@@ -69,6 +69,31 @@ async function getMapData(mapId: string) {
   return data;
 }
 
+function correctScore(score: number, map_id: string): number {
+  let ezMultiplier = 1;
+  switch (map_id.toString()) {
+    case '2117567': // RO16 FM1
+      ezMultiplier = 2.2;
+      break;
+    case '4186806': // RO16 FM2
+      ezMultiplier = 1.9;
+      break;
+    default:
+      ezMultiplier = 1;
+      break;
+  }
+
+  const correctedScore = score * ezMultiplier;
+  return Math.round(correctedScore);
+}
+
+const ezModNumbers = [
+  2, // EZ
+  3, // EZNF
+  10, // EZHD
+  11, // EZHDNF
+];
+
 // - LISTENERS
 
 nodecg().listenFor('saveMatch', async (data, ack) => {
@@ -81,10 +106,20 @@ nodecg().listenFor('saveMatch', async (data, ack) => {
 
     game.scores.forEach((score: any) => {
       if (score.pass === '1') {
+        let finalScore = score.score;
+
+        if (score.enabled_mods !== null) {
+          if (ezModNumbers.includes(Number(score.enabled_mods))) {
+            finalScore = correctScore(score.score, game.beatmap_id);
+
+            nodecg().log.debug(`Player ${score.user_id} used EZ mod, score was ${score.score}, corrected score is ${finalScore}`);
+          }
+        }
+
         if (score.team === '1') {
-          teamBlueScores.push(score.score);
+          teamBlueScores.push(finalScore);
         } else if (score.team === '2') {
-          teamRedScores.push(score.score);
+          teamRedScores.push(finalScore);
         }
       }
     });
@@ -105,9 +140,42 @@ nodecg().listenFor('saveMatch', async (data, ack) => {
           return;
         }
 
-        db.serialize(() => {
-          db.run(`INSERT OR IGNORE INTO Score (team_id, map_id, score) VALUES (${teamBlueId}, ${row.id}, ${teamBlueScore})`);
-          db.run(`INSERT OR IGNORE INTO Score (team_id, map_id, score) VALUES (${teamRedId}, ${row.id}, ${teamRedScore})`);
+        // Team Blue
+        db.each(`SELECT * FROM Score WHERE map_id=${row.id} AND team_id=${teamBlueId}`, (err2: Error, row2: any) => {
+          if (err2) {
+            nodecg().log.error(err2);
+            return;
+          }
+
+          // Check if score exists
+          if (row2 === undefined) {
+            db.run(`INSERT INTO Score (team_id, map_id, score) VALUES (${teamBlueId}, ${row.id}, ${teamBlueScore})`);
+            return;
+          }
+
+          // Check if score is higher, otherwise don't update
+          if (row2.score < teamBlueScore) {
+            db.run(`UPDATE Score SET score=${teamBlueScore} WHERE map_id=${row.id} AND team_id=${teamBlueId}`);
+          }
+        });
+
+        // Team Red
+        db.each(`SELECT * FROM Score WHERE map_id=${row.id} AND team_id=${teamRedId}`, (err2: Error, row3: any) => {
+          if (err2) {
+            nodecg().log.error(err2);
+            return;
+          }
+
+          // Check if score exists
+          if (row3 === undefined) {
+            db.run(`INSERT INTO Score (team_id, map_id, score) VALUES (${teamRedId}, ${row.id}, ${teamRedScore})`);
+            return;
+          }
+
+          // Check if score is higher, otherwise don't update
+          if (row3.score < teamRedScore) {
+            db.run(`UPDATE Score SET score=${teamRedScore} WHERE map_id=${row.id} AND team_id=${teamRedId}`);
+          }
         });
       });
     } catch (e) {
