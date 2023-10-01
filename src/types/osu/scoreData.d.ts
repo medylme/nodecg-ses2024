@@ -7,3 +7,20 @@ export interface ScoreData {
   teamRedName: string;
   teamRedScore: number
 }
+
+interface ComparisonScore {
+  teamBlueScore: number;
+  teamRedScore: number;
+}
+
+interface ComparisonScoreWithCode extends ComparisonScore {
+  code: string;
+}
+
+interface ComparisonScores {
+  [key: string]: ComparisonScore;
+}
+
+interface Pools {
+  [key: string]: string[];
+}

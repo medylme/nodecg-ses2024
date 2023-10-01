@@ -2,13 +2,14 @@
 /* eslint-disable max-len */
 /* eslint-disable import/no-extraneous-dependencies */
 /* eslint-disable @typescript-eslint/indent */
-import { Team, Map } from '@nodecg-vue-ts-template/types/osu';
+import { Team, Map, Score, ComparisonScore, ComparisonScores } from '@nodecg-vue-ts-template/types/osu';
+import clone from 'clone';
+import { open } from 'sqlite';
 import { get as nodecg } from './util/nodecg';
-import { currentTeamsReplicant } from './util/replicants';
+import { currentTeamsReplicant, currentComparisonPoolReplicant, currentComparisonsReplicant, currentComparisonsScoresReplicant, currentPoolsReplicant } from './util/replicants';
+import Pools from './util/pools';
 
 const sqlite3 = require('sqlite3').verbose();
-
-const db = new sqlite3.Database('db/wah2023.sqlite3');
 
 const apiKey = process.env.OSU_API_KEY;
 if (apiKey === undefined) {
@@ -22,6 +23,7 @@ async function testApiKey() {
   const data = await response.json();
   return data;
 }
+
 testApiKey().then((data) => {
   if (data.error) {
     nodecg().log.error(data.error);
@@ -31,24 +33,17 @@ testApiKey().then((data) => {
   }
 });
 
+// Generate pools replicant
+currentPoolsReplicant.value = Pools[currentComparisonPoolReplicant.value];
+
 // Generate teams replicant
 const getTeams = async () => {
-  const teamArray: Team[] = [];
-
-  await db.serialize(() => {
-    db.each('SELECT * FROM Team', (err: Error, row: Team) => {
-      if (err) {
-        nodecg().log.error(err);
-      } else {
-        const team: Team = {
-          id: row.id,
-          name: row.name,
-        };
-        teamArray.push(team);
-      }
-    });
+  const db = await open({
+    filename: 'db/wah2023.sqlite3',
+    driver: sqlite3.cached.Database,
   });
 
+  const teamArray: Team[] = await db.all('SELECT * FROM Team');
   currentTeamsReplicant.value = teamArray;
 };
 getTeams();
@@ -96,7 +91,68 @@ const ezModNumbers = [
 
 // - LISTENERS
 
+nodecg().listenFor('updateComparisonScores', async () => {
+  const db = await open({
+    filename: 'db/wah2023.sqlite3',
+    driver: sqlite3.cached.Database,
+  });
+
+  const currentPool = clone(currentComparisonPoolReplicant.value);
+  const currentComparisons = clone(currentComparisonsReplicant.value);
+
+  const teamBlueId = clone(currentComparisons[0].id);
+  const teamRedId = clone(currentComparisons[1].id);
+
+  const comparisonsScores: ComparisonScores = {};
+  const mapSlots = Pools[currentPool];
+
+  mapSlots.forEach(async (mapSlot) => {
+    const slotIndex = `${currentPool}-${mapSlot}`;
+
+    const map: Map | undefined = await db.get(`SELECT * FROM Map WHERE code = '${slotIndex}'`);
+
+    if (map === undefined) {
+      nodecg().log.error(`Map ${slotIndex} not found in database!`);
+      return;
+    }
+
+    const mapId = map.id;
+
+    const comparisonScore: ComparisonScore = {
+      teamBlueScore: 0,
+      teamRedScore: 0,
+    };
+
+    const teamBlueScoreObject = await db.get(`SELECT score FROM Score WHERE map_id=${mapId} AND team_id=${teamBlueId}`);
+    const teamRedScoreObject = await db.get(`SELECT score FROM Score WHERE map_id=${mapId} AND team_id=${teamRedId}`);
+
+    let teamBlueScore: number;
+    let teamRedScore: number;
+    if (teamBlueScoreObject === undefined) {
+      teamBlueScore = 0;
+    } else {
+      teamBlueScore = teamBlueScoreObject.score;
+    }
+    if (teamRedScoreObject === undefined) {
+      teamRedScore = 0;
+    } else {
+      teamRedScore = teamRedScoreObject.score;
+    }
+
+    comparisonScore.teamBlueScore = teamBlueScore;
+    comparisonScore.teamRedScore = teamRedScore;
+    comparisonsScores[mapSlot] = comparisonScore;
+  });
+
+  currentComparisonsScoresReplicant.value = comparisonsScores;
+});
+
 nodecg().listenFor('saveMatch', async (data, ack) => {
+  const db = await open({
+    filename: 'db/wah2023.sqlite3',
+    driver: sqlite3.cached.Database,
+  });
+
   const matchData = await getMatchData(data.matchId);
   const { teamRedId, teamRedName, teamBlueId, teamBlueName } = data;
 
@@ -141,7 +197,7 @@ nodecg().listenFor('saveMatch', async (data, ack) => {
         }
 
         // Team Blue
-        db.each(`SELECT * FROM Score WHERE map_id=${row.id} AND team_id=${teamBlueId}`, (err2: Error, row2: any) => {
+        db.each(`SELECT * FROM Score WHERE map_id=${row.id} AND team_id=${teamBlueId}`, (err2: Error, row2: Score) => {
           if (err2) {
             nodecg().log.error(err2);
             return;
@@ -160,7 +216,7 @@ nodecg().listenFor('saveMatch', async (data, ack) => {
         });
 
         // Team Red
-        db.each(`SELECT * FROM Score WHERE map_id=${row.id} AND team_id=${teamRedId}`, (err2: Error, row3: any) => {
+        db.each(`SELECT * FROM Score WHERE map_id=${row.id} AND team_id=${teamRedId}`, (err2: Error, row3: Score) => {
           if (err2) {
             nodecg().log.error(err2);
             return;

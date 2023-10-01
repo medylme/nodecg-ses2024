@@ -2,12 +2,7 @@
 import { useReplicant } from 'nodecg-vue-composable';
 import { Ref, ref } from 'vue';
 import { Pools } from '@nodecg-vue-ts-template/types/schemas';
-import { Rounds } from '../../types/osu';
-
-interface Team {
-  id: number;
-  name: string;
-}
+import { Rounds, Team } from '../../types/osu';
 
 function getPoolTitle(code: Rounds): string {
   switch (code) {
@@ -31,25 +26,13 @@ function getPoolTitle(code: Rounds): string {
 // Get Teams
 const currentTeamsReplicant = nodecg.Replicant<Team[]>('currentTeamsReplicant');
 const teamArray: Ref<string[]> = ref([]);
-function refreshTeams() {
-  if (currentTeamsReplicant.value === undefined) {
-    throw new Error('currentTeamsReplicant is undefined');
-  }
-
-  const newArray: string[] = [];
-  currentTeamsReplicant.value.forEach((team) => {
-    newArray.push(team.name);
-  });
-
-  teamArray.value = newArray;
-}
 
 // Current Pool Code
 const currentComparisonPoolReplicant = useReplicant<string>(
   'currentComparisonPool',
   'wah2023',
   {
-    defaultValue: 'Qualifiers',
+    defaultValue: 'RO16',
   },
 );
 
@@ -214,14 +197,35 @@ function updateTeams(blueTeamName: string, redTeamName: string) {
   currentComparisonsReplicant.data = [teamBlue, teamRed];
   currentComparisonsReplicant.save();
 
-  currentComparisonPoolReplicant.data = getPoolTitle(selectedPool.value as Rounds);
+  currentComparisonPoolReplicant.data = selectedPool.value;
   currentComparisonPoolReplicant.save();
 
   teamBlueName.value = currentComparisonsReplicant.data[0]?.name;
   teamRedName.value = currentComparisonsReplicant.data[1]?.name;
 
   nodecg.sendMessage('updateComparisonTeams', '1');
+  nodecg.sendMessage('updateComparisonScores', '1');
 }
+
+function refreshTeams() {
+  if (currentTeamsReplicant.value === undefined || currentComparisonsReplicant === undefined || currentComparisonsReplicant.data === undefined) {
+    throw new Error('currentTeamsReplicant is undefined');
+  }
+
+  const newArray: string[] = [];
+  currentTeamsReplicant.value.forEach((team) => {
+    newArray.push(team.name);
+  });
+
+  teamArray.value = newArray;
+
+  teamBlueName.value = currentComparisonsReplicant.data[0].name;
+  teamRedName.value = currentComparisonsReplicant.data[1].name;
+}
+
+setTimeout(() => {
+  refreshTeams();
+}, 1000);
 
 </script>
 
@@ -241,7 +245,6 @@ function updateTeams(blueTeamName: string, redTeamName: string) {
       </div>
     </section>
     <section class="flex flex-row gap-4">
-      <QBtn class="w-fit" color="primary" label="Refresh Teams" @click="refreshTeams" />
       <QBtn color="red" label="Save to Program" @click="updateTeams(teamBlueSelectionName, teamRedSelectionName)" />
     </section>
   </div>

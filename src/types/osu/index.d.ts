@@ -1,3 +1,3 @@
 export * from './rounds';
-export { Map, Team } from './database';
+export * from './database';
 export * from './scoreData';

@@ -40,6 +40,10 @@ function saveToDatabase() {
   });
 }
 
+setTimeout(() => {
+  refreshTeams();
+}, 1000);
+
 </script>
 
 <template>
@@ -54,7 +58,6 @@ function saveToDatabase() {
       </div>
     </div>
     <div class="flex flex-row gap-4">
-      <QBtn class="w-fit" color="primary" label="Refresh Teams" @click="refreshTeams" />
       <QBtn color="red" label="Save to Database" @click="saveToDatabase" />
     </div>
   </div>
