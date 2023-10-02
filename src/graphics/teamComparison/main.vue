@@ -186,6 +186,7 @@ function updatePanel() {
         break;
     }
 
+    // shit way of implementing it but i don't fucking care i've been on this shit for 6 HOURS AND IM GOING CRAZY HAHAHAHAAH!!!!!
     const currentComparisonsScoresArray: ComparisonScoreWithCode[] = [];
     currentSlots.forEach((slot) => {
       nodecg.log.info(slot);
@@ -242,16 +243,16 @@ function getScoreString(score: number): string {
       </div>
       <li v-for="(match, index) in comparisonScores" :key="index" class="row w-3/4">
         <div class="team-red-bar font-semibold text-white text-4xl"
-          :style="'width:' + (Math.max(match.teamRedScore / (match.teamRedScore + match.teamBlueScore) * 50, 5)) + '%'">
-          {{ getScoreString(match.teamRedScore) }}
+          :style="'width:' + (Math.max(match.teamRedScore / (4000000) * 90, 8)) + '%'">
+          <p class="px-1 rounded-xl w-fit">{{ getScoreString(match.teamRedScore) }}</p>
         </div>
         <div
           class="match-code text-[2.5rem] text-bold text-white border-x-white border-x-[0.5rem] flex items-center justify-center">
           {{ match.code }}
         </div>
         <div class="team-blue-bar font-semibold text-white text-4xl"
-          :style="'width:' + (Math.max(match.teamBlueScore / (match.teamRedScore + match.teamBlueScore) * 50, 5)) + '%'">
-          {{ getScoreString(match.teamBlueScore) }}
+          :style="'width:' + (Math.max(match.teamBlueScore / (4000000) * 75, 8)) + '%'">
+          <p class="px-1 rounded-xl w-fit">{{ getScoreString(match.teamBlueScore) }}</p>
         </div>
       </li>
     </ul>
@@ -278,7 +279,7 @@ function getScoreString(score: number): string {
   width: 90%;
   margin: 10px auto;
   display: grid;
-  grid-template-columns: 46% 8% 46%;
+  grid-template-columns: 45% 11% 45%;
 }
 
 .team-red-bar {
