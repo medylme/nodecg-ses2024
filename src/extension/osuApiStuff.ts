@@ -190,50 +190,25 @@ nodecg().listenFor('saveMatch', async (data, ack) => {
     });
 
     try {
-      db.each(`SELECT * FROM Map WHERE osu_id=${game.beatmap_id}`, (err: Error, row: Map) => {
-        if (err || row.id === undefined) {
-          nodecg().log.error(`Map ID ${game.beatmap_id} not in database!`);
-          return;
-        }
+      const mapDbObject = await db.get(`SELECT * FROM Map WHERE osu_id=${game.beatmap_id}`);
+      if (mapDbObject === undefined) {
+        nodecg().log.error(`Map ID ${game.beatmap_id} not in database!`);
+        return;
+      }
 
-        // Team Blue
-        db.each(`SELECT * FROM Score WHERE map_id=${row.id} AND team_id=${teamBlueId}`, (err2: Error, row2: Score) => {
-          if (err2) {
-            nodecg().log.error(err2);
-            return;
-          }
+      const teamBlueScoreObject = await db.get(`SELECT * FROM Score WHERE map_id=${mapDbObject.id} AND team_id=${teamBlueId}`);
+      if (teamBlueScoreObject === undefined) {
+        await db.run(`INSERT INTO Score (team_id, map_id, score) VALUES (${teamBlueId}, ${mapDbObject.id}, ${teamBlueScore})`);
+      } else if (teamBlueScoreObject.score < teamBlueScore) {
+        await db.run(`UPDATE Score SET score=${teamBlueScore} WHERE map_id=${mapDbObject.id} AND team_id=${teamBlueId}`);
+      }
 
-          // Check if score exists
-          if (row2 === undefined) {
-            db.run(`INSERT INTO Score (team_id, map_id, score) VALUES (${teamBlueId}, ${row.id}, ${teamBlueScore})`);
-            return;
-          }
-
-          // Check if score is higher, otherwise don't update
-          if (row2.score < teamBlueScore) {
-            db.run(`UPDATE Score SET score=${teamBlueScore} WHERE map_id=${row.id} AND team_id=${teamBlueId}`);
-          }
-        });
-
-        // Team Red
-        db.each(`SELECT * FROM Score WHERE map_id=${row.id} AND team_id=${teamRedId}`, (err2: Error, row3: Score) => {
-          if (err2) {
-            nodecg().log.error(err2);
-            return;
-          }
-
-          // Check if score exists
-          if (row3 === undefined) {
-            db.run(`INSERT INTO Score (team_id, map_id, score) VALUES (${teamRedId}, ${row.id}, ${teamRedScore})`);
-            return;
-          }
-
-          // Check if score is higher, otherwise don't update
-          if (row3.score < teamRedScore) {
-            db.run(`UPDATE Score SET score=${teamRedScore} WHERE map_id=${row.id} AND team_id=${teamRedId}`);
-          }
-        });
-      });
+      const teamRedScoreObject = await db.get(`SELECT * FROM Score WHERE map_id=${mapDbObject.id} AND team_id=${teamRedId}`);
+      if (teamRedScoreObject === undefined) {
+        await db.run(`INSERT INTO Score (team_id, map_id, score) VALUES (${teamRedId}, ${mapDbObject.id}, ${teamRedScore})`);
+      } else if (teamRedScoreObject.score < teamRedScore) {
+        await db.run(`UPDATE Score SET score=${teamRedScore} WHERE map_id=${mapDbObject.id} AND team_id=${teamRedId}`);
+      }
     } catch (e) {
       nodecg().log.error(e);
     }
