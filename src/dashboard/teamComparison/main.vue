@@ -240,8 +240,8 @@ setTimeout(() => {
       <QSelect class="grow" filled @update:modelValue="newValue => selectedPool = newValue.value"
         v-model="selectedPoolModel" :options="poolOptions" label="Comparison Pool" stack-label />
       <div class="q-pa-md flex flex-row gap-4">
-        <QSelect class="w-36" v-model="teamBlueSelectionName" :options="teamArray" label="Team Blue" />
         <QSelect class="w-36" v-model="teamRedSelectionName" :options="teamArray" label="Team Red" />
+        <QSelect class="w-36" v-model="teamBlueSelectionName" :options="teamArray" label="Team Blue" />
       </div>
     </section>
     <section class="flex flex-row gap-4">
