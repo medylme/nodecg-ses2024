@@ -80,6 +80,7 @@ const pools = {
     'NM3',
     'NM4',
     'NM5',
+    'NM6',
     'HD1',
     'HD2',
     'HD3',
