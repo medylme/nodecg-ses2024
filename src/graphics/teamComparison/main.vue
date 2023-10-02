@@ -229,27 +229,28 @@ function getScoreString(score: number): string {
 </script>
 
 <template>
-  <div id="container" class="w-full h-full flex flex-col items-center justify-center text-xl m-12">
-    <h1 class="text-3xl m-2">Best Performance On Last Pool</h1>
-    <h3 class="text-4xl text-bold">{{ currentComparisonPoolReplicant?.data }}</h3>
+  <div id="container" class="w-full h-full flex flex-col items-center justify-center text-xl m-12 text-white">
+    <h1 class="text-6xl m-2 text-bold">Best Performance On Last Pool</h1>
+    <h3 class="text-7xl text-bold">{{ currentComparisonPoolReplicant?.data }}</h3>
     <ul class="w-full bar-chart mt-8">
       <div class="w-full mb-5">
         <div class="row w-full">
-          <div class="text-right font-semibold"> {{ teamRedName }} </div>
-          <p class="w-full text-center">vs</p>
-          <div class="text-left font-semibold"> {{ teamBlueName }} </div>
+          <div class="text-right text-7xl font-semibold"> {{ teamRedName }} </div>
+          <p class="w-full text-7xl text-center">vs</p>
+          <div class="text-left text-7xl font-semibold"> {{ teamBlueName }} </div>
         </div>
       </div>
-      <li v-for="(match, index) in comparisonScores" :key="index" class="row w-full">
-        <div class="team-red-bar font-semibold text-white"
-          :style="'width:' + (match.teamRedScore / (match.teamRedScore + match.teamBlueScore) * 50) + '%'">
+      <li v-for="(match, index) in comparisonScores" :key="index" class="row w-3/4">
+        <div class="team-red-bar font-semibold text-white text-4xl"
+          :style="'width:' + (Math.max(match.teamRedScore / (match.teamRedScore + match.teamBlueScore) * 50, 5)) + '%'">
           {{ getScoreString(match.teamRedScore) }}
         </div>
-        <div class="match-code">
+        <div
+          class="match-code text-[2.5rem] text-bold text-white border-x-white border-x-[0.5rem] flex items-center justify-center">
           {{ match.code }}
         </div>
-        <div class="team-blue-bar font-semibold text-white"
-          :style="'width:' + (match.teamBlueScore / (match.teamRedScore + match.teamBlueScore) * 50) + '%'">
+        <div class="team-blue-bar font-semibold text-white text-4xl"
+          :style="'width:' + (Math.max(match.teamBlueScore / (match.teamRedScore + match.teamBlueScore) * 50, 5)) + '%'">
           {{ getScoreString(match.teamBlueScore) }}
         </div>
       </li>

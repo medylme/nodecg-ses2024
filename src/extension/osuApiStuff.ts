@@ -197,14 +197,14 @@ nodecg().listenFor('saveMatch', async (data, ack) => {
       }
 
       const teamBlueScoreObject = await db.get(`SELECT * FROM Score WHERE map_id=${mapDbObject.id} AND team_id=${teamBlueId}`);
-      if (teamBlueScoreObject === undefined) {
+      if (teamBlueScoreObject.score === undefined) {
         await db.run(`INSERT INTO Score (team_id, map_id, score) VALUES (${teamBlueId}, ${mapDbObject.id}, ${teamBlueScore})`);
       } else if (teamBlueScoreObject.score < teamBlueScore) {
         await db.run(`UPDATE Score SET score=${teamBlueScore} WHERE map_id=${mapDbObject.id} AND team_id=${teamBlueId}`);
       }
 
       const teamRedScoreObject = await db.get(`SELECT * FROM Score WHERE map_id=${mapDbObject.id} AND team_id=${teamRedId}`);
-      if (teamRedScoreObject === undefined) {
+      if (teamRedScoreObject.score === undefined) {
         await db.run(`INSERT INTO Score (team_id, map_id, score) VALUES (${teamRedId}, ${mapDbObject.id}, ${teamRedScore})`);
       } else if (teamRedScoreObject.score < teamRedScore) {
         await db.run(`UPDATE Score SET score=${teamRedScore} WHERE map_id=${mapDbObject.id} AND team_id=${teamRedId}`);
