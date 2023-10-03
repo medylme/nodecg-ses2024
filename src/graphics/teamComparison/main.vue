@@ -233,22 +233,32 @@ function getScoreString(score: number): string {
 <template>
   <div id="container" class="w-full h-full flex flex-col items-center justify-center text-xl m-12 text-white">
     <h1 class="text-6xl m-2 text-bold">Best Performance On Last Pool</h1>
-    <h3 class="text-7xl text-bold">{{ currentComparisonPoolReplicant?.data }}</h3>
     <ul class="w-full bar-chart mt-8">
+      <div class="w-full flex items-center justify-center mt-4 mb-8">
+        <h2 class="text-7xl px-4 font-semibold text-center bg-white text-black">Best {{
+          currentComparisonPoolReplicant?.data
+        }} Team Score</h2>
+      </div>
       <div class="w-full mb-5">
-        <div class="row w-full">
-          <div class="text-right text-7xl font-semibold"> {{ teamRedName }} </div>
-          <p class="w-full text-7xl text-center">vs</p>
-          <div class="text-left text-7xl font-semibold"> {{ teamBlueName }} </div>
+        <div class="row w-full text-6xl">
+          <div class="font-semibold w-full flex flex-row justify-end">
+            <h3 class="red-color w-fit px-4 py-2 text-right red-background text-white">{{ teamRedName }}</h3>
+          </div>
+          <h3
+            class="w-full text-center bg-white text-black font-semibold flex items-center justify-center border-x-black border-x-[0.5rem]">
+            vs</h3>
+          <div class="font-semibold w-full flex flex-row justify-right">
+            <h3 class="blue-color w-fit px-4 py-2 blue-background text-white">{{ teamBlueName }}</h3>
+          </div>
         </div>
       </div>
       <li v-for="(match, index) in comparisonScores" :key="index" class="row w-3/4">
-        <div class="team-red-bar font-semibold text-white text-4xl"
+        <div class="team-red-bar font-semibold text-Fwhite text-4xl"
           :style="'width:' + (Math.max(match.teamRedScore / (4000000) * 90, 8)) + '%'">
           <p class="px-1 rounded-xl w-fit">{{ getScoreString(match.teamRedScore) }}</p>
         </div>
         <div
-          class="match-code text-[2.5rem] text-bold text-white border-x-white border-x-[0.5rem] flex items-center justify-center">
+          class="match-code text-[2.5rem] font-bold text-black bg-white border-x-black border-x-[0.5rem] flex items-center justify-center">
           {{ match.code }}
         </div>
         <div class="team-blue-bar font-semibold text-white text-4xl"
@@ -281,6 +291,22 @@ function getScoreString(score: number): string {
   margin: 10px auto;
   display: grid;
   grid-template-columns: 45% 11% 45%;
+}
+
+.red-color {
+  color: hsl(360, 90%, 60%);
+}
+
+.blue-color {
+  color: hsl(240, 100%, 66%);
+}
+
+.red-background {
+  background-color: hsl(360, 90%, 60%);
+}
+
+.blue-background {
+  background-color: hsl(240, 100%, 66%);
 }
 
 .team-red-bar {
