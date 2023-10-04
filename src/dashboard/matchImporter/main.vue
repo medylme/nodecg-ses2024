@@ -49,9 +49,9 @@ setTimeout(() => {
 </script>
 
 <template>
-  <div class="flex justify-center items-center">
+  <div class="flex flex-col justify-center items-center">
     <div class="q-pa-md flex flex-row gap-4 items-center justify-center">
-      <QInput class="w-64" filled v-model="matchUrl" label="Match ID" />
+      <QInput class="w-64" filled v-model="matchUrl" label="MP ID" />
       <div class="q-pa-md flex flex-row gap-4">
         <QSelect class="w-36" @update:modelValue="newValue => teamRedSelection = newValue" v-model="teamRedSelection"
           :options="teamArray" label="Team Red" />
@@ -62,5 +62,6 @@ setTimeout(() => {
     <div class="flex flex-row gap-4">
       <QBtn color="red" label="Save to Database" @click="Replicants.saveToDatabase" />
     </div>
+    <footer class="mt-8 text-slate-200 italic">Note: Don't touch unless your name is dyl {{ ":^)" }}</footer>
   </div>
 </template>

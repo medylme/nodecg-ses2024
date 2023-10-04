@@ -236,6 +236,7 @@ onMounted(() => {
     <section class="flex flex-col">
       <p>Current Comparison Pool: <span class="text-bold">{{ getPoolTitle(Replicants.currentComparisonPool?.data)
       }}</span></p>
+      <br />
       <p>Current Team Red: <span class="text-bold">{{ teamRedName }}</span></p>
       <p>Current Team Blue: <span class="text-bold">{{ teamBlueName }}</span></p>
     </section>
