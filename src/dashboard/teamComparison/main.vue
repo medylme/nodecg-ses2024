@@ -249,7 +249,7 @@ onMounted(() => {
       </div>
     </section>
     <section class="flex flex-row gap-4">
-      <QBtn color="red" label="Save to Program" @click="updateTeams(teamBlueSelectionName, teamRedSelectionName)" />
+      <QBtn color="blue" label="Apply to Slot 1" @click="updateTeams(teamBlueSelectionName, teamRedSelectionName)" />
     </section>
   </div>
 </template>

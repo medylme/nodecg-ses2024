@@ -218,6 +218,6 @@ const selectedMap = ref(Replicants.currentMapReplicant?.data as string);
         </ul>
       </QExpansionItem>
     </div>
-    <QBtn color="red" label="Save to Program" @click="Replicants.savePoolMap(selectedPool, selectedMap)" />
+    <QBtn color="blue" label="Apply" @click="Replicants.savePoolMap(selectedPool, selectedMap)" />
   </div>
 </template>
