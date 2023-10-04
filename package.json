@@ -87,8 +87,14 @@
       },
       {
         "name": "teamComparison",
-        "title": "Team Comparison Control",
+        "title": "Team Comparison Control (Slot 1)",
         "file": "teamComparison.html",
+        "width": 3
+      },
+      {
+        "name": "teamComparisonTwo",
+        "title": "Team Comparison Control (Slot 2)",
+        "file": "teamComparisonTwo.html",
         "width": 3
       },
       {
@@ -111,6 +117,11 @@
       },
       {
         "file": "teamComparison.html",
+        "width": 1920,
+        "height": 1080
+      },
+      {
+        "file": "teamComparisonTwo.html",
         "width": 1920,
         "height": 1080
       }

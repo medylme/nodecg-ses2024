@@ -138,16 +138,16 @@ class Replicants {
   public static currentPool: string[] = [];
 
   public static currentComparisonPool = useReplicant<string>(
-    'currentComparisonPool',
+    'currentComparisonTwoPool',
     'wah2023',
   );
 
   public static currentComparisons = useReplicant<Team[]>(
-    'currentComparisons',
+    'currentComparisonsTwo',
     'wah2023',
   );
 
-  public static currentComparisonsScores = useReplicant<ComparisonScores>('currentComparisonsScores', 'wah2023');
+  public static currentComparisonsScores = useReplicant<ComparisonScores>('currentComparisonsTwoScores', 'wah2023');
 
   public static convertComparisonsScoresToArray(): ComparisonScoreWithCode[] {
     const scoresArray: ComparisonScoreWithCode[] = [];
@@ -214,7 +214,7 @@ function updatePanel(): void {
   }, 1000);
 }
 
-nodecg.listenFor('updateComparisonTeams', () => {
+nodecg.listenFor('updateComparisonTwoTeams', () => {
   window.location.reload();
 });
 

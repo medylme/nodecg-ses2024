@@ -24,6 +24,16 @@ export const currentComparisonsReplicant = nodecg().Replicant<Team[]>('currentCo
 
 export const currentComparisonsScoresReplicant = nodecg().Replicant<ComparisonScores>('currentComparisonsScores');
 
+export const currentTeamsTwoReplicant = nodecg().Replicant<Team[]>('currentTeamsReplicantTwo');
+
+export const currentComparisonTwoPoolReplicant = nodecg().Replicant<string>('currentComparisonTwoPool', {
+  defaultValue: 'RO16',
+});
+
+export const currentComparisonsTwoReplicant = nodecg().Replicant<Team[]>('currentComparisonsTwo');
+
+export const currentComparisonsTwoScoresReplicant = nodecg().Replicant<ComparisonScores>('currentComparisonsTwoScores');
+
 export const currentPoolsReplicant = nodecg().Replicant<string[]>('currentPools', {
   defaultValue: pools[currentComparisonPoolReplicant.value],
 });

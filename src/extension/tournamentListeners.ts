@@ -5,7 +5,7 @@
 import { Team, Map, ComparisonScore, ComparisonScores } from '@nodecg-vue-ts-template/types/osu';
 import { open } from 'sqlite';
 import { get as nodecg } from './util/nodecg';
-import { currentTeamsReplicant, currentComparisonPoolReplicant, currentComparisonsReplicant, currentComparisonsScoresReplicant, currentPoolsReplicant } from './util/replicants';
+import { currentTeamsReplicant, currentComparisonPoolReplicant, currentComparisonsReplicant, currentComparisonsScoresReplicant, currentPoolsReplicant, currentComparisonTwoPoolReplicant, currentComparisonsTwoReplicant, currentComparisonsTwoScoresReplicant } from './util/replicants';
 import Pools from './util/pools';
 import OsuApiUtils from './util/osuApiUtils';
 
@@ -122,6 +122,62 @@ nodecg().listenFor('updateComparisonScores', async () => {
   });
 
   currentComparisonsScoresReplicant.value = comparisonsScores;
+});
+
+nodecg().listenFor('updateComparisonTwoScores', async () => {
+  const db = await open({
+    filename: 'db/wah2023.sqlite3',
+    driver: sqlite3.cached.Database,
+  });
+
+  const currentPool = currentComparisonTwoPoolReplicant.value;
+  const currentComparisons = currentComparisonsTwoReplicant.value;
+
+  const teamBlueId = currentComparisons[0].id;
+  const teamRedId = currentComparisons[1].id;
+
+  const comparisonsScores: ComparisonScores = {};
+  const mapSlots = Pools[currentPool];
+
+  mapSlots.forEach(async (mapSlot) => {
+    const slotIndex = `${currentPool}-${mapSlot}`;
+
+    const map: Map | undefined = await db.get(`SELECT * FROM Map WHERE code = '${slotIndex}'`);
+
+    if (map === undefined) {
+      nodecg().log.error(`Map ${slotIndex} not found in database!`);
+      return;
+    }
+
+    const mapId = map.id;
+
+    const comparisonScore: ComparisonScore = {
+      teamBlueScore: 0,
+      teamRedScore: 0,
+    };
+
+    const teamBlueScoreObject = await db.get(`SELECT score FROM Score WHERE map_id=${mapId} AND team_id=${teamBlueId}`);
+    const teamRedScoreObject = await db.get(`SELECT score FROM Score WHERE map_id=${mapId} AND team_id=${teamRedId}`);
+
+    let teamBlueScore: number;
+    let teamRedScore: number;
+    if (teamBlueScoreObject === undefined) {
+      teamBlueScore = 0;
+    } else {
+      teamBlueScore = teamBlueScoreObject.score;
+    }
+    if (teamRedScoreObject === undefined) {
+      teamRedScore = 0;
+    } else {
+      teamRedScore = teamRedScoreObject.score;
+    }
+
+    comparisonScore.teamBlueScore = teamBlueScore;
+    comparisonScore.teamRedScore = teamRedScore;
+    comparisonsScores[mapSlot] = comparisonScore;
+  });
+
+  currentComparisonsTwoScoresReplicant.value = comparisonsScores;
 });
 
 nodecg().listenFor('saveMatch', async (data, ack) => {
