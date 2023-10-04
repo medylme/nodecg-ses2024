@@ -110,7 +110,7 @@ nodecg().listenFor('updateComparisonScores', async () => {
     const map: Map | undefined = await db.get(`SELECT * FROM Map WHERE code = '${slotIndex}'`);
 
     if (map === undefined) {
-      nodecg().log.error(`Map ${slotIndex} not found in database!`);
+      nodecg().log.error(`updateComparisonScores | Map ${slotIndex} not found in database!`);
       return;
     }
 
@@ -166,7 +166,7 @@ nodecg().listenFor('updateComparisonTwoScores', async () => {
     const map: Map | undefined = await db.get(`SELECT * FROM Map WHERE code = '${slotIndex}'`);
 
     if (map === undefined) {
-      nodecg().log.error(`Map ${slotIndex} not found in database!`);
+      nodecg().log.error(`updateComparisonScores 2 | Map ${slotIndex} not found in database!`);
       return;
     }
 
@@ -246,7 +246,7 @@ nodecg().listenFor('saveMatch', async (data, ack) => {
     try {
       const mapDbObject = await db.get(`SELECT * FROM Map WHERE osu_id=${game.beatmap_id}`);
       if (mapDbObject === undefined) {
-        nodecg().log.error(`Map ID ${game.beatmap_id} not in database!`);
+        nodecg().log.error(`saveMatch | Map ID ${game.beatmap_id} not found in database! Skipping...`);
         return;
       }
 
