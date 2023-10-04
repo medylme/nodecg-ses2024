@@ -237,9 +237,9 @@ function getScoreString(score: number): string {
     <h1 class="text-6xl m-2 text-bold">Best Performance On Last Pool</h1>
     <ul class="w-full bar-chart mt-8">
       <div class="w-full flex items-center justify-center mt-4 mb-8">
-        <h2 class="text-7xl px-4 font-semibold text-center bg-white text-black">Best {{
+        <h2 class="text-7xl px-4 font-semibold text-center bg-white text-black">Best Team Score in {{
           Replicants.currentComparisonPool?.data
-        }} Team Score</h2>
+        }}</h2>
       </div>
       <div class="w-full mb-5">
         <div class="row w-full text-6xl">

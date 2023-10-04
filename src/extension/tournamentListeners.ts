@@ -24,17 +24,12 @@ class Replicants {
       currentComparisonsReplicant.value = teamArray.slice(0, 2);
     }
 
-    if (currentComparisonsScoresReplicant.value === undefined) {
-      nodecg().sendMessage('updateComparisonScores');
-    }
-
     if (currentComparisonTwoPoolReplicant.value === undefined) {
       currentComparisonsTwoReplicant.value = teamArray.slice(0, 2);
     }
 
-    if (currentComparisonsTwoScoresReplicant.value === undefined) {
-      nodecg().sendMessage('updateComparisonTwoScores');
-    }
+    nodecg().sendMessage('updateComparisonScores');
+    nodecg().sendMessage('updateComparisonTwoScores');
   }
 
   public static async generateTeamsReplicant(): Promise<void> {
