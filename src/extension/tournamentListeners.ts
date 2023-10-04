@@ -14,10 +14,6 @@ const sqlite3 = require('sqlite3').verbose();
 // Replicants
 class Replicants {
   public static async setTeamComparisonDefaults(): Promise<void> {
-    if (currentComparisonPoolReplicant.value !== undefined && currentComparisonsReplicant.value !== undefined) {
-      return;
-    }
-
     const db = await open({
       filename: 'db/wah2023.sqlite3',
       driver: sqlite3.cached.Database,
@@ -28,8 +24,16 @@ class Replicants {
       currentComparisonsReplicant.value = teamArray.slice(0, 2);
     }
 
+    if (currentComparisonsScoresReplicant.value === undefined) {
+      nodecg().sendMessage('updateComparisonScores');
+    }
+
     if (currentComparisonTwoPoolReplicant.value === undefined) {
       currentComparisonsTwoReplicant.value = teamArray.slice(0, 2);
+    }
+
+    if (currentComparisonsTwoScoresReplicant.value === undefined) {
+      nodecg().sendMessage('updateComparisonTwoScores');
     }
   }
 
