@@ -97,11 +97,11 @@ nodecg().listenFor('updateComparisonScores', async () => {
     driver: sqlite3.cached.Database,
   });
 
-  const currentPool = clone(currentComparisonPoolReplicant.value);
-  const currentComparisons = clone(currentComparisonsReplicant.value);
+  const currentPool = currentComparisonPoolReplicant.value;
+  const currentComparisons = currentComparisonsReplicant.value;
 
-  const teamBlueId = clone(currentComparisons[0].id);
-  const teamRedId = clone(currentComparisons[1].id);
+  const teamBlueId = currentComparisons[0].id;
+  const teamRedId = currentComparisons[1].id;
 
   const comparisonsScores: ComparisonScores = {};
   const mapSlots = Pools[currentPool];

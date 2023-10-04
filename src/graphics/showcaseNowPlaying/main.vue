@@ -1,34 +1,37 @@
 <script setup lang="ts">
 import { useReplicant } from 'nodecg-vue-composable';
 
-// Get replicants
-const currentMapReplicant = useReplicant<string>('currentMap', 'wah2023', {
-  defaultValue: '...',
-});
-const currentPoolCodeReplicant = useReplicant<string>(
-  'currentPoolCode',
-  'wah2023',
-  {
+class Replicants {
+  public static currentMap = useReplicant<string>('currentMap', 'wah2023', {
     defaultValue: '...',
-  },
-);
-const currentPoolStringReplicant = useReplicant<string>(
-  'currentPoolString',
-  'wah2023',
-  {
-    defaultValue: '...',
-  },
-);
+  });
+
+  public static currentPoolCode = useReplicant<string>(
+    'currentPoolCode',
+    'wah2023',
+    {
+      defaultValue: '...',
+    },
+  );
+
+  public static currentPoolString = useReplicant<string>(
+    'currentPoolString',
+    'wah2023',
+    {
+      defaultValue: '...',
+    },
+  );
+}
 
 </script>
 
 <template>
   <div id="container">
     <p class="mapdata" id="map">
-      {{ currentMapReplicant?.data }}
+      {{ Replicants.currentMap?.data }}
     </p>
     <p class="mapdata" id="pool">
-      {{ currentPoolStringReplicant?.data }}
+      {{ Replicants.currentPoolString?.data }}
     </p>
   </div>
 </template>

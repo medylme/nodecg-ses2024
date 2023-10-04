@@ -3,7 +3,6 @@
 import { useReplicant } from 'nodecg-vue-composable';
 import { ref } from 'vue';
 import clone from 'clone';
-import { Pools } from '@nodecg-vue-ts-template/types/schemas';
 import { Rounds } from '../../types/osu';
 
 function getPoolTitle(code: Rounds): string {
@@ -24,24 +23,6 @@ function getPoolTitle(code: Rounds): string {
       return 'Unknown';
   }
 }
-
-// Current Pool String
-const currentPoolStringReplicant = useReplicant<string>(
-  'currentPoolString',
-  'wah2023',
-  {
-    defaultValue: 'Qualifiers',
-  },
-);
-
-// Current Pool Code
-const currentPoolCodeReplicant = useReplicant<string>(
-  'currentPoolCode',
-  'wah2023',
-  {
-    defaultValue: 'QL',
-  },
-);
 
 const pools = {
   QL: [
@@ -169,34 +150,50 @@ const pools = {
     'TB',
   ],
 };
-
 const poolOptions = Object.keys(pools).map((pool) => ({
   label: pool,
   value: pool,
 }));
-const selectedPoolModel = ref(clone(currentPoolCodeReplicant?.data as Rounds));
-const selectedPool = ref(currentPoolCodeReplicant?.data as Rounds);
 
-// Current Map
-const currentMapReplicant = useReplicant<string>('currentMap', 'wah2023', {
-  defaultValue: 'NM1',
-});
+class Replicants {
+  public static currentPoolStringReplicant = useReplicant<string>(
+    'currentPoolString',
+    'wah2023',
+    {
+      defaultValue: 'Qualifiers',
+    },
+  );
 
-const selectedMap = ref(currentMapReplicant?.data as string);
+  public static currentPoolCodeReplicant = useReplicant<string>(
+    'currentPoolCode',
+    'wah2023',
+    {
+      defaultValue: 'QL',
+    },
+  );
 
-// Save to Program
-function saveToProgram(pool: string, map: string) {
-  if (currentPoolCodeReplicant === undefined || currentPoolStringReplicant === undefined || currentMapReplicant === undefined) {
-    return;
+  public static currentMapReplicant = useReplicant<string>('currentMap', 'wah2023', {
+    defaultValue: 'NM1',
+  });
+
+  // Save to Program
+  public static savePoolMap(pool: string, map: string) {
+    if (this.currentPoolCodeReplicant === undefined || this.currentPoolStringReplicant === undefined || this.currentMapReplicant === undefined) {
+      return;
+    }
+
+    this.currentPoolCodeReplicant.data = clone(pool);
+    this.currentPoolCodeReplicant.save();
+    this.currentPoolStringReplicant.data = getPoolTitle(pool as Rounds);
+    this.currentPoolStringReplicant.save();
+    this.currentMapReplicant.data = clone(map);
+    this.currentMapReplicant.save();
   }
-
-  currentPoolCodeReplicant.data = clone(pool);
-  currentPoolCodeReplicant.save();
-  currentPoolStringReplicant.data = getPoolTitle(pool as Rounds);
-  currentPoolStringReplicant.save();
-  currentMapReplicant.data = clone(map);
-  currentMapReplicant.save();
 }
+
+const selectedPoolModel = ref(Replicants.currentPoolCodeReplicant?.data as Rounds);
+const selectedPool = ref(Replicants.currentPoolCodeReplicant?.data as Rounds);
+const selectedMap = ref(Replicants.currentMapReplicant?.data as string);
 
 </script>
 
@@ -204,9 +201,9 @@ function saveToProgram(pool: string, map: string) {
   <div class="flex items-center justify-center">
     <div class="">
       <p>
-        Current Pool: <span class="text-bold">{{ currentPoolStringReplicant?.data }}</span>
+        Current Pool: <span class="text-bold">{{ Replicants.currentPoolStringReplicant?.data }}</span>
         <br />
-        Current Map: <span class="text-bold">{{ currentMapReplicant?.data }}</span>
+        Current Map: <span class="text-bold">{{ Replicants.currentMapReplicant?.data }}</span>
       </p>
     </div>
     <div class="q-pa-md">
@@ -221,6 +218,6 @@ function saveToProgram(pool: string, map: string) {
         </ul>
       </QExpansionItem>
     </div>
-    <QBtn color="red" label="Save to Program" @click="saveToProgram(selectedPool, selectedMap)" />
+    <QBtn color="red" label="Save to Program" @click="Replicants.savePoolMap(selectedPool, selectedMap)" />
   </div>
 </template>

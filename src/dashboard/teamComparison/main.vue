@@ -1,40 +1,8 @@
 <script setup lang="ts">
 import { useReplicant } from 'nodecg-vue-composable';
-import { Ref, ref } from 'vue';
+import { Ref, onMounted, ref } from 'vue';
 import { Pools } from '@nodecg-vue-ts-template/types/schemas';
 import { Rounds, Team } from '../../types/osu';
-
-function getPoolTitle(code: Rounds): string {
-  switch (code) {
-    case 'QL':
-      return 'Qualifiers';
-    case 'RO16':
-      return 'Round of 16';
-    case 'QF':
-      return 'Quarterfinals';
-    case 'SF':
-      return 'Semifinals';
-    case 'F':
-      return 'Finals';
-    case 'GF':
-      return 'Grand Finals';
-    default:
-      return 'Unknown';
-  }
-}
-
-// Get Teams
-const currentTeamsReplicant = nodecg.Replicant<Team[]>('currentTeamsReplicant');
-const teamArray: Ref<string[]> = ref([]);
-
-// Current Pool Code
-const currentComparisonPoolReplicant = useReplicant<string>(
-  'currentComparisonPool',
-  'wah2023',
-  {
-    defaultValue: 'RO16',
-  },
-);
 
 const pools = {
   QL: [
@@ -162,32 +130,63 @@ const pools = {
     'TB',
   ],
 };
-
 const poolOptions = Object.keys(pools).map((pool) => ({
   label: pool,
   value: pool,
 }));
-const selectedPoolModel = ref(currentComparisonPoolReplicant?.data as Rounds);
-const selectedPool = ref(currentComparisonPoolReplicant?.data as Rounds);
 
-// Current Comparisons
-const currentComparisonsReplicant = useReplicant<Team[]>(
-  'currentComparisons',
-  'wah2023',
-);
+function getPoolTitle(code: Rounds): string {
+  switch (code) {
+    case 'QL':
+      return 'Qualifiers';
+    case 'RO16':
+      return 'Round of 16';
+    case 'QF':
+      return 'Quarterfinals';
+    case 'SF':
+      return 'Semifinals';
+    case 'F':
+      return 'Finals';
+    case 'GF':
+      return 'Grand Finals';
+    default:
+      return 'Unknown';
+  }
+}
+
+class Replicants {
+  public static currentTeams = nodecg.Replicant<Team[]>('currentTeamsReplicant');
+
+  public static currentComparisonPool = useReplicant<string>(
+    'currentComparisonPool',
+    'wah2023',
+    {
+      defaultValue: 'RO16',
+    },
+  );
+
+  public static currentComparisons = useReplicant<Team[]>(
+    'currentComparisons',
+    'wah2023',
+  );
+}
+
+const selectedPoolModel = ref(Replicants.currentComparisonPool?.data as Rounds);
+const selectedPool = ref(Replicants.currentComparisonPool?.data as Rounds);
+const teamBlueName = ref(Replicants.currentComparisons?.data?.[0]?.name);
+const teamRedName = ref(Replicants.currentComparisons?.data?.[1]?.name);
+const teamArray: Ref<string[]> = ref([]);
 
 const teamBlueSelectionName = ref('');
 const teamRedSelectionName = ref('');
-const teamBlueName = ref(currentComparisonsReplicant?.data?.[0]?.name);
-const teamRedName = ref(currentComparisonsReplicant?.data?.[1]?.name);
 
 function updateTeams(blueTeamName: string, redTeamName: string) {
-  if (currentComparisonsReplicant === undefined || currentComparisonPoolReplicant === undefined) {
+  if (Replicants.currentComparisons === undefined || Replicants.currentComparisonPool === undefined) {
     return;
   }
 
-  const teamBlue = currentTeamsReplicant.value?.find((team) => team.name === blueTeamName) as Team;
-  const teamRed = currentTeamsReplicant.value?.find((team) => team.name === redTeamName) as Team;
+  const teamBlue = Replicants.currentTeams.value?.find((team) => team.name === blueTeamName) as Team;
+  const teamRed = Replicants.currentTeams.value?.find((team) => team.name === redTeamName) as Team;
 
   if (teamBlue === teamRed) {
     // eslint-disable-next-line no-alert
@@ -195,47 +194,49 @@ function updateTeams(blueTeamName: string, redTeamName: string) {
     return;
   }
 
-  currentComparisonsReplicant.data = [teamBlue, teamRed];
-  currentComparisonsReplicant.save();
+  Replicants.currentComparisons.data = [teamBlue, teamRed];
+  Replicants.currentComparisons.save();
 
-  currentComparisonPoolReplicant.data = selectedPool.value;
-  currentComparisonPoolReplicant.save();
+  Replicants.currentComparisonPool.data = selectedPool.value;
+  Replicants.currentComparisonPool.save();
 
-  teamBlueName.value = currentComparisonsReplicant.data[0]?.name;
-  teamRedName.value = currentComparisonsReplicant.data[1]?.name;
+  teamBlueName.value = Replicants.currentComparisons.data[0]?.name;
+  teamRedName.value = Replicants.currentComparisons.data[1]?.name;
 
   nodecg.sendMessage('updateComparisonTeams', '1');
   nodecg.sendMessage('updateComparisonScores', '1');
 }
 
 function refreshTeams() {
-  if (currentTeamsReplicant.value === undefined || currentComparisonsReplicant === undefined || currentComparisonsReplicant.data === undefined) {
-    throw new Error('currentTeamsReplicant is undefined');
-  }
+  setTimeout(() => {
+    if (Replicants.currentTeams.value === undefined || Replicants.currentComparisons === undefined || Replicants.currentComparisons.data === undefined) {
+      throw new Error('currentTeamsReplicant is undefined');
+    }
 
-  const newArray: string[] = [];
-  currentTeamsReplicant.value.forEach((team) => {
-    newArray.push(team.name);
-  });
+    const newArray: string[] = [];
+    Replicants.currentTeams.value.forEach((team) => {
+      newArray.push(team.name);
+    });
 
-  teamArray.value = newArray;
+    teamArray.value = newArray;
 
-  teamBlueName.value = currentComparisonsReplicant.data[0].name;
-  teamRedName.value = currentComparisonsReplicant.data[1].name;
+    teamBlueName.value = Replicants.currentComparisons.data[0].name;
+    teamRedName.value = Replicants.currentComparisons.data[1].name;
+  }, 1000);
 }
 
-setTimeout(() => {
+onMounted(() => {
   refreshTeams();
-}, 1000);
+});
 
 </script>
 
 <template>
   <div class="flex justify-center items-center">
     <section class="flex flex-col">
-      <p>Current Comparison Pool: <span class="text-bold">{{ currentComparisonPoolReplicant?.data }}</span></p>
-      <p>Current Team Blue: <span class="text-bold">{{ teamBlueName }}</span></p>
+      <p>Current Comparison Pool: <span class="text-bold">{{ Replicants.currentComparisonPool?.data }}</span></p>
       <p>Current Team Red: <span class="text-bold">{{ teamRedName }}</span></p>
+      <p>Current Team Blue: <span class="text-bold">{{ teamBlueName }}</span></p>
     </section>
     <section class="q-pa-md flex flex-row gap-4 items-end justify-center">
       <QSelect class="grow" filled @update:modelValue="newValue => selectedPool = newValue.value"

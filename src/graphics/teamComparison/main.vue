@@ -131,92 +131,95 @@ const pools = {
   ],
 };
 
-// Current Pool
-const currentComparisonPoolReplicant = useReplicant<string>(
-  'currentComparisonPool',
-  'wah2023',
-);
-
-// Current Comparison
-const currentComparisonsReplicant = useReplicant<Team[]>(
-  'currentComparisons',
-  'wah2023',
-);
-
-// Current Comparison Scores
-const currentComparisonsScoresReplicant = useReplicant<ComparisonScores>('currentComparisonsScores', 'wah2023');
-
-const teamBlueName = ref('');
-const teamRedName = ref('');
+const teamBlueName = ref('...');
+const teamRedName = ref('...');
 const comparisonScores = ref<ComparisonScoreWithCode[]>();
 
-function updatePanel() {
+class Replicants {
+  public static currentPool: string[] = [];
+
+  public static currentComparisonPool = useReplicant<string>(
+    'currentComparisonPool',
+    'wah2023',
+  );
+
+  public static currentComparisons = useReplicant<Team[]>(
+    'currentComparisons',
+    'wah2023',
+  );
+
+  public static currentComparisonsScores = useReplicant<ComparisonScores>('currentComparisonsScores', 'wah2023');
+
+  public static convertComparisonsScoresToArray(): ComparisonScoreWithCode[] {
+    const scoresArray: ComparisonScoreWithCode[] = [];
+
+    // shit way of implementing it but i don't fucking care i've been on this shit for 6 HOURS AND IM GOING CRAZY HAHAHAHAAH!!!!!
+    this.currentPool.forEach((slot) => {
+      if (this.currentComparisonsScores === undefined || this.currentComparisonsScores.data === undefined) {
+        throw new Error('currentComparisonsScoresReplicant is undefined');
+      }
+
+      const scoresObject = this.currentComparisonsScores.data;
+      nodecg.log.info(scoresObject);
+      scoresObject[slot] = scoresObject[slot] ?? { teamBlueScore: 0, teamRedScore: 0 };
+      scoresArray.push({
+        code: slot,
+        ...scoresObject[slot],
+      });
+    });
+
+    return scoresArray;
+  }
+}
+
+function updatePanel(): void {
   setTimeout(() => {
     if (
-      currentComparisonsReplicant === undefined
-      || currentComparisonsReplicant.data === undefined
-      || currentComparisonsScoresReplicant === undefined
-      || currentComparisonsScoresReplicant.data === undefined
-      || currentComparisonPoolReplicant === undefined
-      || currentComparisonPoolReplicant.data === undefined
+      Replicants.currentComparisons === undefined
+      || Replicants.currentComparisons.data === undefined
+      || Replicants.currentComparisonsScores === undefined
+      || Replicants.currentComparisonsScores.data === undefined
+      || Replicants.currentComparisonPool === undefined
+      || Replicants.currentComparisonPool.data === undefined
     ) {
-      throw new Error('currentComparisonsReplicant is undefined');
+      throw new Error('One or more replicants are undefined');
     }
 
-    teamBlueName.value = currentComparisonsReplicant.data[0]?.name;
-    teamRedName.value = currentComparisonsReplicant.data[1]?.name;
+    // Teams
+    teamBlueName.value = Replicants.currentComparisons.data[0]?.name || '...';
+    teamRedName.value = Replicants.currentComparisons.data[1]?.name || '...';
 
-    let currentSlots: string[] = [];
-    switch (currentComparisonPoolReplicant.data) {
+    // Pool
+    switch (Replicants.currentComparisonPool.data) {
       case 'RO16':
-        currentSlots = pools.RO16;
+        Replicants.currentPool = pools.RO16;
         break;
       case 'QF':
-        currentSlots = pools.QF;
+        Replicants.currentPool = pools.QF;
         break;
       case 'SF':
-        currentSlots = pools.SF;
+        Replicants.currentPool = pools.SF;
         break;
       case 'F':
-        currentSlots = pools.F;
+        Replicants.currentPool = pools.F;
         break;
       case 'GF':
-        currentSlots = pools.GF;
+        Replicants.currentPool = pools.GF;
         break;
       default:
         break;
     }
 
-    // shit way of implementing it but i don't fucking care i've been on this shit for 6 HOURS AND IM GOING CRAZY HAHAHAHAAH!!!!!
-    const currentComparisonsScoresArray: ComparisonScoreWithCode[] = [];
-    currentSlots.forEach((slot) => {
-      nodecg.log.info(slot);
-
-      if (currentComparisonsScoresReplicant.data === undefined) {
-        throw new Error('currentComparisonsScoresReplicant is undefined');
-      }
-
-      const currentComparisonScore = clone(currentComparisonsScoresReplicant.data);
-      currentComparisonScore[slot] = currentComparisonScore[slot] ?? { teamBlueScore: 0, teamRedScore: 0 };
-      currentComparisonsScoresArray.push({
-        code: slot,
-        ...currentComparisonScore[slot],
-      });
-    });
-
-    comparisonScores.value = currentComparisonsScoresArray;
-    nodecg.log.info(comparisonScores.value);
+    // Scores
+    comparisonScores.value = Replicants.convertComparisonsScoresToArray();
   }, 1000);
 }
 
 nodecg.listenFor('updateComparisonTeams', () => {
-  nodecg.sendMessage('updateComparisonScores', '1');
-
-  setTimeout(() => { updatePanel(); }, 1000);
+  window.location.reload();
 });
 
 onMounted(() => {
-  nodecg.sendMessage('updateComparisonScores', '1');
   updatePanel();
 });
 
@@ -236,7 +239,7 @@ function getScoreString(score: number): string {
     <ul class="w-full bar-chart mt-8">
       <div class="w-full flex items-center justify-center mt-4 mb-8">
         <h2 class="text-7xl px-4 font-semibold text-center bg-white text-black">Best {{
-          currentComparisonPoolReplicant?.data
+          Replicants.currentComparisonPool?.data
         }} Team Score</h2>
       </div>
       <div class="w-full mb-5">

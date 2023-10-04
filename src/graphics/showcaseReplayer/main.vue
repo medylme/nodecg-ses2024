@@ -16,7 +16,7 @@ const acc = ref(0);
 const score = ref(0);
 const scoreV1String = ref('');
 
-// send websocket request
+// gosumemory websocket
 const socket = new ReconnectingWebSocket('ws://localhost:24050/ws');
 socket.onmessage = (event) => {
   const data = JSON.parse(event.data);
