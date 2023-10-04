@@ -135,7 +135,7 @@ const poolOptions = Object.keys(pools).map((pool) => ({
   value: pool,
 }));
 
-function getPoolTitle(code: Rounds): string {
+function getPoolTitle(code: string | undefined): string {
   switch (code) {
     case 'QL':
       return 'Qualifiers';
@@ -209,8 +209,8 @@ function updateTeams(blueTeamName: string, redTeamName: string) {
 
 function refreshTeams() {
   setTimeout(() => {
-    if (Replicants.currentTeams.value === undefined || Replicants.currentComparisons === undefined || Replicants.currentComparisons.data === undefined) {
-      throw new Error('currentTeamsReplicant is undefined');
+    if (Replicants.currentTeams.value === undefined) {
+      throw new Error('One or more replicants are undefined');
     }
 
     const newArray: string[] = [];
@@ -220,8 +220,8 @@ function refreshTeams() {
 
     teamArray.value = newArray;
 
-    teamBlueName.value = Replicants.currentComparisons.data[0].name;
-    teamRedName.value = Replicants.currentComparisons.data[1].name;
+    teamBlueName.value = Replicants.currentComparisons?.data?.[0].name;
+    teamRedName.value = Replicants.currentComparisons?.data?.[1].name;
   }, 1000);
 }
 
@@ -234,7 +234,8 @@ onMounted(() => {
 <template>
   <div class="flex justify-center items-center">
     <section class="flex flex-col">
-      <p>Current Comparison Pool: <span class="text-bold">{{ Replicants.currentComparisonPool?.data }}</span></p>
+      <p>Current Comparison Pool: <span class="text-bold">{{ getPoolTitle(Replicants.currentComparisonPool?.data)
+      }}</span></p>
       <p>Current Team Red: <span class="text-bold">{{ teamRedName }}</span></p>
       <p>Current Team Blue: <span class="text-bold">{{ teamBlueName }}</span></p>
     </section>

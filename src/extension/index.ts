@@ -15,5 +15,5 @@ export = (nodecg: NodeCG): void => {
    * things to be loaded *after* the NodeCG context is set.
    */
   set(nodecg);
-  require('./osuApiStuff');
+  require('./tournamentListeners');
 };

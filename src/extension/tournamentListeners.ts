@@ -13,6 +13,26 @@ const sqlite3 = require('sqlite3').verbose();
 
 // Replicants
 class Replicants {
+  public static async setTeamComparisonDefaults(): Promise<void> {
+    if (currentComparisonPoolReplicant.value !== undefined && currentComparisonsReplicant.value !== undefined) {
+      return;
+    }
+
+    const db = await open({
+      filename: 'db/wah2023.sqlite3',
+      driver: sqlite3.cached.Database,
+    });
+    const teamArray: Team[] = await db.all('SELECT * FROM Team');
+
+    if (currentComparisonPoolReplicant.value === undefined) {
+      currentComparisonsReplicant.value = teamArray.slice(0, 2);
+    }
+
+    if (currentComparisonTwoPoolReplicant.value === undefined) {
+      currentComparisonsTwoReplicant.value = teamArray.slice(0, 2);
+    }
+  }
+
   public static async generateTeamsReplicant(): Promise<void> {
     const db = await open({
       filename: 'db/wah2023.sqlite3',
@@ -30,6 +50,7 @@ class Replicants {
 
 Replicants.generatePoolsReplicant();
 Replicants.generateTeamsReplicant();
+Replicants.setTeamComparisonDefaults();
 
 // Test osu! API
 OsuApiUtils.testApiKey().then((data) => {

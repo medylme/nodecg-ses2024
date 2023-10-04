@@ -140,6 +140,9 @@ class Replicants {
   public static currentComparisonPool = useReplicant<string>(
     'currentComparisonTwoPool',
     'wah2023',
+    {
+      defaultValue: 'RO16',
+    },
   );
 
   public static currentComparisons = useReplicant<Team[]>(
@@ -173,23 +176,12 @@ class Replicants {
 
 function updatePanel(): void {
   setTimeout(() => {
-    if (
-      Replicants.currentComparisons === undefined
-      || Replicants.currentComparisons.data === undefined
-      || Replicants.currentComparisonsScores === undefined
-      || Replicants.currentComparisonsScores.data === undefined
-      || Replicants.currentComparisonPool === undefined
-      || Replicants.currentComparisonPool.data === undefined
-    ) {
-      throw new Error('One or more replicants are undefined');
-    }
-
     // Teams
-    teamBlueName.value = Replicants.currentComparisons.data[0]?.name || '...';
-    teamRedName.value = Replicants.currentComparisons.data[1]?.name || '...';
+    teamBlueName.value = Replicants.currentComparisons?.data?.[0]?.name || '...';
+    teamRedName.value = Replicants.currentComparisons?.data?.[1]?.name || '...';
 
     // Pool
-    switch (Replicants.currentComparisonPool.data) {
+    switch (Replicants.currentComparisonPool?.data) {
       case 'RO16':
         Replicants.currentPool = pools.RO16;
         break;
