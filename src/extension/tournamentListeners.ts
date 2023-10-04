@@ -2,29 +2,37 @@
 /* eslint-disable max-len */
 /* eslint-disable import/no-extraneous-dependencies */
 /* eslint-disable @typescript-eslint/indent */
-import { Team, Map, Score, ComparisonScore, ComparisonScores } from '@nodecg-vue-ts-template/types/osu';
-import clone from 'clone';
+import { Team, Map, ComparisonScore, ComparisonScores } from '@nodecg-vue-ts-template/types/osu';
 import { open } from 'sqlite';
 import { get as nodecg } from './util/nodecg';
 import { currentTeamsReplicant, currentComparisonPoolReplicant, currentComparisonsReplicant, currentComparisonsScoresReplicant, currentPoolsReplicant } from './util/replicants';
 import Pools from './util/pools';
+import OsuApiUtils from './util/osuApiUtils';
 
 const sqlite3 = require('sqlite3').verbose();
 
-const apiKey = process.env.OSU_API_KEY;
-if (apiKey === undefined) {
-  throw new Error("osu! API key not found! Please set it in the .env file as 'OSU_API_KEY'.");
+// Replicants
+class Replicants {
+  public static async generateTeamsReplicant(): Promise<void> {
+    const db = await open({
+      filename: 'db/wah2023.sqlite3',
+      driver: sqlite3.cached.Database,
+    });
+
+    const teamArray: Team[] = await db.all('SELECT * FROM Team');
+    currentTeamsReplicant.value = teamArray;
+  }
+
+  public static generatePoolsReplicant(): void {
+    currentPoolsReplicant.value = Pools[currentComparisonPoolReplicant.value];
+  }
 }
 
-// osu api
-async function testApiKey() {
-  const endpoint = `https://osu.ppy.sh/api/get_user?k=${apiKey}&u=1`;
-  const response = await fetch(endpoint);
-  const data = await response.json();
-  return data;
-}
+Replicants.generatePoolsReplicant();
+Replicants.generateTeamsReplicant();
 
-testApiKey().then((data) => {
+// Test osu! API
+OsuApiUtils.testApiKey().then((data) => {
   if (data.error) {
     nodecg().log.error(data.error);
     throw new Error('osu! API test failed!');
@@ -32,37 +40,6 @@ testApiKey().then((data) => {
     nodecg().log.info('osu! API utils working.');
   }
 });
-
-// Generate pools replicant
-currentPoolsReplicant.value = Pools[currentComparisonPoolReplicant.value];
-
-// Generate teams replicant
-const getTeams = async () => {
-  const db = await open({
-    filename: 'db/wah2023.sqlite3',
-    driver: sqlite3.cached.Database,
-  });
-
-  const teamArray: Team[] = await db.all('SELECT * FROM Team');
-  currentTeamsReplicant.value = teamArray;
-};
-getTeams();
-
-// - FUNCTIONS
-
-async function getMatchData(matchId: string) {
-  const endpoint = `https://osu.ppy.sh/api/get_match?k=${apiKey}&mp=${matchId}`;
-  const response = await fetch(endpoint);
-  const data = await response.json();
-  return data;
-}
-
-async function getMapData(mapId: string) {
-  const endpoint = `https://osu.ppy.sh/api/get_beatmaps?k=${apiKey}&b=${mapId}`;
-  const response = await fetch(endpoint);
-  const data = await response.json();
-  return data;
-}
 
 function correctScore(score: number, map_id: string): number {
   let ezMultiplier = 1;
@@ -153,7 +130,7 @@ nodecg().listenFor('saveMatch', async (data, ack) => {
     driver: sqlite3.cached.Database,
   });
 
-  const matchData = await getMatchData(data.matchId);
+  const matchData = await OsuApiUtils.getMatchData(data.matchId);
   const { teamRedId, teamRedName, teamBlueId, teamBlueName } = data;
 
   await matchData.games.forEach(async (game: any) => {
