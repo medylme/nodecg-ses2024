@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { Team } from '@nodecg-vue-ts-template/types/schemas';
+import { useReplicant } from 'nodecg-vue-composable';
 import { Ref, ref } from 'vue';
 
 const teamBlueSelection = ref('');
@@ -8,38 +9,38 @@ const matchUrl = ref('');
 const teamArray: Ref<string[]> = ref([]);
 
 class Replicants {
-  public static currentTeamsReplicant = nodecg.Replicant<Team[]>('currentTeamsReplicant');
+  public static currentTeams = useReplicant<Team[]>('currentTeamsReplicant', 'wah2023');
 
   public static refreshTeams() {
     const newArray: string[] = [];
-    this.currentTeamsReplicant?.value?.forEach((team) => {
+    this.currentTeams?.data?.forEach((team) => {
       newArray.push(team.name);
     });
 
     teamArray.value = newArray;
   }
+}
 
-  public static saveToDatabase() {
-    if (teamBlueSelection.value === '' || teamRedSelection.value === '' || matchUrl.value === '') {
-      // eslint-disable-next-line no-alert
-      alert('Error: One of the fields is empty!');
-      return;
-    }
-
-    if (teamBlueSelection.value === teamRedSelection.value) {
-      // eslint-disable-next-line no-alert
-      alert('Error: Selected teams are the same!');
-      return;
-    }
-
-    nodecg.sendMessage('saveMatch', {
-      matchId: matchUrl.value,
-      teamBlueName: teamBlueSelection.value,
-      teamBlueId: this.currentTeamsReplicant.value?.find((team) => team.name === teamBlueSelection.value)?.id,
-      teamRedName: teamRedSelection.value,
-      teamRedId: this.currentTeamsReplicant.value?.find((team) => team.name === teamRedSelection.value)?.id,
-    });
+function saveToDatabase() {
+  if (teamBlueSelection.value === '' || teamRedSelection.value === '' || matchUrl.value === '') {
+    // eslint-disable-next-line no-alert
+    alert('Error: One of the fields is empty!');
+    return;
   }
+
+  if (teamBlueSelection.value === teamRedSelection.value) {
+    // eslint-disable-next-line no-alert
+    alert('Error: Selected teams are the same!');
+    return;
+  }
+
+  nodecg.sendMessage('saveMatch', {
+    matchId: matchUrl.value,
+    teamBlueName: teamBlueSelection.value,
+    teamBlueId: Replicants.currentTeams?.data?.find((team) => team.name === teamBlueSelection.value)?.id,
+    teamRedName: teamRedSelection.value,
+    teamRedId: Replicants.currentTeams?.data?.find((team) => team.name === teamRedSelection.value)?.id,
+  });
 }
 
 setTimeout(() => {
@@ -60,7 +61,7 @@ setTimeout(() => {
       </div>
     </div>
     <div class="flex flex-row gap-4">
-      <QBtn color="red" label="Save to Database" @click="Replicants.saveToDatabase" />
+      <QBtn color="red" label="Save to Database" @click="saveToDatabase" />
     </div>
     <footer class="mt-8 text-slate-200 italic">Note: Don't touch unless your name is dyl {{ ":^)" }}</footer>
   </div>
