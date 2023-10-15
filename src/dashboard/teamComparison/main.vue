@@ -5,7 +5,7 @@ import { Pools } from '@nodecg-vue-ts-template/types/schemas';
 import { Rounds, Team } from '../../types/osu';
 
 const pools = {
-  QL: [
+  Q: [
     'NM1',
     'NM2',
     'NM3',
@@ -137,7 +137,7 @@ const poolOptions = Object.keys(pools).map((pool) => ({
 
 function getPoolTitle(code: string | undefined): string {
   switch (code) {
-    case 'QL':
+    case 'Q':
       return 'Qualifiers';
     case 'RO16':
       return 'Round of 16';

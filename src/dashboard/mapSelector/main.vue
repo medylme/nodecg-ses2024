@@ -7,7 +7,7 @@ import { Rounds } from '../../types/osu';
 
 function getPoolTitle(code: Rounds): string {
   switch (code) {
-    case 'QL':
+    case 'Q':
       return 'Qualifiers';
     case 'RO16':
       return 'Round of 16';
@@ -25,7 +25,7 @@ function getPoolTitle(code: Rounds): string {
 }
 
 const pools = {
-  QL: [
+  Q: [
     'NM1',
     'NM2',
     'NM3',
@@ -168,7 +168,7 @@ class Replicants {
     'currentPoolCode',
     'wah2023',
     {
-      defaultValue: 'QL',
+      defaultValue: 'Q',
     },
   );
 

@@ -1,1 +1,1 @@
-export type Rounds = 'QL' | 'RO16' | 'QF' | 'SF' | 'F' | 'GF';
+export type Rounds = 'Q' | 'RO16' | 'QF' | 'SF' | 'F' | 'GF';

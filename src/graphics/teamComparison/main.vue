@@ -4,7 +4,7 @@ import { useReplicant } from 'nodecg-vue-composable';
 import { onMounted, ref } from 'vue';
 
 const pools = {
-  QL: [
+  Q: [
     'NM1',
     'NM2',
     'NM3',

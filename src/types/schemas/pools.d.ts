@@ -1,5 +1,5 @@
 export interface Pools {
-  QL: string[];
+  Q: string[];
   RO16: string[];
   QF: string[];
   SF: string[];

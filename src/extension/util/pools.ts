@@ -4,7 +4,7 @@ import { Pools } from '@nodecg-vue-ts-template/types/osu';
 const pools: Pools = {
 };
 
-pools['QL'] = [
+pools['Q'] = [
   'NM1',
   'NM2',
   'NM3',
