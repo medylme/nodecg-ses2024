@@ -76,6 +76,15 @@ function correctScore(score: number, map_id: string): number {
     case '3839691': // QF FM2
       ezMultiplier = 1.9;
       break;
+    case '3205642': // SF FM1
+      ezMultiplier = 2.5;
+      break;
+    case '3860777': // SF FM2
+      ezMultiplier = 1.8;
+      break;
+    case '2027309': // SF FM3
+      ezMultiplier = 3;
+      break;
     default:
       ezMultiplier = 1;
       break;
