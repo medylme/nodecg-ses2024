@@ -257,25 +257,29 @@ nodecg().listenFor('saveMatch', async (data, ack) => {
       teamRedScore += Number(score);
     });
 
+    const mapDbObject = await db.get(`SELECT * FROM Map WHERE osu_id=${game.beatmap_id}`) as Map;
+    if (mapDbObject === undefined) {
+      nodecg().log.error(`saveMatch | Map ID ${game.beatmap_id} not found in database! Skipping...`);
+      return;
+    }
+
     try {
-      const mapDbObject = await db.get(`SELECT * FROM Map WHERE osu_id=${game.beatmap_id}`) as Map;
-      if (mapDbObject === undefined) {
-        nodecg().log.error(`saveMatch | Map ID ${game.beatmap_id} not found in database! Skipping...`);
-        return;
-      }
-
       const teamBlueScoreObject = await db.get(`SELECT * FROM Score WHERE map_id=${mapDbObject.id} AND team_id=${teamBlueId}`) as Score;
-      if (teamBlueScoreObject === undefined) {
-        await db.run(`INSERT INTO Score (team_id, map_id, score) VALUES (${teamBlueId}, ${mapDbObject.id}, ${teamBlueScore})`);
-      } else if (teamBlueScoreObject.score < teamBlueScore) {
+      if (teamBlueScoreObject?.score && teamBlueScore > teamBlueScoreObject.score) {
         await db.run(`UPDATE Score SET score=${teamBlueScore} WHERE map_id=${mapDbObject.id} AND team_id=${teamBlueId}`);
+      } else {
+        await db.run(`INSERT INTO Score (team_id, map_id, score) VALUES (${teamBlueId}, ${mapDbObject.id}, ${teamBlueScore})`);
       }
+    } catch (e) {
+      nodecg().log.error(e);
+    }
 
+    try {
       const teamRedScoreObject = await db.get(`SELECT * FROM Score WHERE map_id=${mapDbObject.id} AND team_id=${teamRedId}`) as Score;
-      if (teamRedScoreObject === undefined) {
-        await db.run(`INSERT INTO Score (team_id, map_id, score) VALUES (${teamRedId}, ${mapDbObject.id}, ${teamRedScore})`);
-      } else if (teamRedScoreObject.score < teamRedScore) {
+      if (teamRedScoreObject?.score && teamRedScore > teamRedScoreObject.score) {
         await db.run(`UPDATE Score SET score=${teamRedScore} WHERE map_id=${mapDbObject.id} AND team_id=${teamRedId}`);
+      } else {
+        await db.run(`INSERT INTO Score (team_id, map_id, score) VALUES (${teamRedId}, ${mapDbObject.id}, ${teamRedScore})`);
       }
     } catch (e) {
       nodecg().log.error(e);
