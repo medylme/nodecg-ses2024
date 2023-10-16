@@ -5,6 +5,23 @@ import { Pools } from '@nodecg-vue-ts-template/types/schemas';
 import { Rounds, Team } from '../../types/osu';
 
 const pools = {
+  Q: [
+    'NM1',
+    'NM2',
+    'NM3',
+    'NM4',
+    'NM5',
+    'HD1',
+    'HD2',
+    'HD3',
+    'HR1',
+    'HR2',
+    'HR3',
+    'DT1',
+    'DT2',
+    'DT3',
+    'TB',
+  ],
   RO16: [
     'NM1',
     'NM2',
@@ -188,7 +205,6 @@ function updateTeams(blueTeamName: string, redTeamName: string) {
   teamBlueName.value = Replicants.currentComparisons.data[0]?.name;
   teamRedName.value = Replicants.currentComparisons.data[1]?.name;
 
-  nodecg.sendMessage('updateComparisonTeams', '1');
   nodecg.sendMessage('updateComparisonScores', '1');
 }
 

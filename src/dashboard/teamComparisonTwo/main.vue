@@ -205,7 +205,6 @@ function updateTeams(blueTeamName: string, redTeamName: string) {
   teamBlueName.value = Replicants.currentComparisons.data[0]?.name;
   teamRedName.value = Replicants.currentComparisons.data[1]?.name;
 
-  nodecg.sendMessage('updateComparisonTwoTeams', '1');
   nodecg.sendMessage('updateComparisonTwoScores', '1');
 }
 

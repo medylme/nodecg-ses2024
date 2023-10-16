@@ -104,115 +104,121 @@ const ezModNumbers = [
 // - LISTENERS
 
 nodecg().listenFor('updateComparisonScores', async () => {
-  const db = await open({
-    filename: 'db/wah2023.sqlite3',
-    driver: sqlite3.cached.Database,
-  });
+  setTimeout(async () => {
+    const db = await open({
+      filename: 'db/wah2023.sqlite3',
+      driver: sqlite3.cached.Database,
+    });
 
-  const currentPool = currentComparisonPoolReplicant.value;
-  const currentComparisons = currentComparisonsReplicant.value;
+    const currentPool = currentComparisonPoolReplicant.value;
+    const currentComparisons = currentComparisonsReplicant.value;
 
-  const teamBlueId = currentComparisons[0].id;
-  const teamRedId = currentComparisons[1].id;
+    const teamBlueId = currentComparisons[0].id;
+    const teamRedId = currentComparisons[1].id;
 
-  const comparisonsScores: ComparisonScores = {};
-  const mapSlots = Pools[currentPool];
+    const comparisonsScores: ComparisonScores = {};
+    const mapSlots = Pools[currentPool];
 
-  mapSlots.forEach(async (mapSlot) => {
-    const slotIndex = `${currentPool}-${mapSlot}`;
+    mapSlots.forEach(async (mapSlot) => {
+      const slotIndex = `${currentPool}-${mapSlot}`;
 
-    const map: Map | undefined = await db.get(`SELECT * FROM Map WHERE code = '${slotIndex}'`);
+      const map: Map | undefined = await db.get(`SELECT * FROM Map WHERE code = '${slotIndex}'`);
 
-    if (map === undefined) {
-      nodecg().log.error(`updateComparisonScores | Map ${slotIndex} not found in database!`);
-      return;
-    }
+      if (map === undefined) {
+        nodecg().log.error(`updateComparisonScores | Map ${slotIndex} not found in database!`);
+        return;
+      }
 
-    const mapId = map.id;
+      const mapId = map.id;
 
-    const comparisonScore: ComparisonScore = {
-      teamBlueScore: 0,
-      teamRedScore: 0,
-    };
+      const comparisonScore: ComparisonScore = {
+        teamBlueScore: 0,
+        teamRedScore: 0,
+      };
 
-    const teamBlueScoreObject = await db.get(`SELECT score FROM Score WHERE map_id=${mapId} AND team_id=${teamBlueId}`);
-    const teamRedScoreObject = await db.get(`SELECT score FROM Score WHERE map_id=${mapId} AND team_id=${teamRedId}`);
+      const teamBlueScoreObject = await db.get(`SELECT score FROM Score WHERE map_id=${mapId} AND team_id=${teamBlueId}`);
+      const teamRedScoreObject = await db.get(`SELECT score FROM Score WHERE map_id=${mapId} AND team_id=${teamRedId}`);
 
-    let teamBlueScore: number;
-    let teamRedScore: number;
-    if (teamBlueScoreObject === undefined) {
-      teamBlueScore = 0;
-    } else {
-      teamBlueScore = teamBlueScoreObject.score;
-    }
-    if (teamRedScoreObject === undefined) {
-      teamRedScore = 0;
-    } else {
-      teamRedScore = teamRedScoreObject.score;
-    }
+      let teamBlueScore: number;
+      let teamRedScore: number;
+      if (teamBlueScoreObject === undefined) {
+        teamBlueScore = 0;
+      } else {
+        teamBlueScore = teamBlueScoreObject.score;
+      }
+      if (teamRedScoreObject === undefined) {
+        teamRedScore = 0;
+      } else {
+        teamRedScore = teamRedScoreObject.score;
+      }
 
-    comparisonScore.teamBlueScore = teamBlueScore;
-    comparisonScore.teamRedScore = teamRedScore;
-    comparisonsScores[mapSlot] = comparisonScore;
-  });
+      comparisonScore.teamBlueScore = teamBlueScore;
+      comparisonScore.teamRedScore = teamRedScore;
+      comparisonsScores[mapSlot] = comparisonScore;
+    });
 
-  currentComparisonsScoresReplicant.value = comparisonsScores;
+    currentComparisonsScoresReplicant.value = comparisonsScores;
+    nodecg().sendMessage('updateComparisonTeams', '1');
+  }, 1000);
 });
 
 nodecg().listenFor('updateComparisonTwoScores', async () => {
-  const db = await open({
-    filename: 'db/wah2023.sqlite3',
-    driver: sqlite3.cached.Database,
-  });
+  setTimeout(async () => {
+    const db = await open({
+      filename: 'db/wah2023.sqlite3',
+      driver: sqlite3.cached.Database,
+    });
 
-  const currentPool = currentComparisonTwoPoolReplicant.value;
-  const currentComparisons = currentComparisonsTwoReplicant.value;
+    const currentPool = currentComparisonTwoPoolReplicant.value;
+    const currentComparisons = currentComparisonsTwoReplicant.value;
 
-  const teamBlueId = currentComparisons[0].id;
-  const teamRedId = currentComparisons[1].id;
+    const teamBlueId = currentComparisons[0].id;
+    const teamRedId = currentComparisons[1].id;
 
-  const comparisonsScores: ComparisonScores = {};
-  const mapSlots = Pools[currentPool];
+    const comparisonsScores: ComparisonScores = {};
+    const mapSlots = Pools[currentPool];
 
-  mapSlots.forEach(async (mapSlot) => {
-    const slotIndex = `${currentPool}-${mapSlot}`;
+    mapSlots.forEach(async (mapSlot) => {
+      const slotIndex = `${currentPool}-${mapSlot}`;
 
-    const map: Map | undefined = await db.get(`SELECT * FROM Map WHERE code = '${slotIndex}'`);
+      const map: Map | undefined = await db.get(`SELECT * FROM Map WHERE code = '${slotIndex}'`);
 
-    if (map === undefined) {
-      nodecg().log.error(`updateComparisonScores 2 | Map ${slotIndex} not found in database!`);
-      return;
-    }
+      if (map === undefined) {
+        nodecg().log.error(`updateComparisonScores 2 | Map ${slotIndex} not found in database!`);
+        return;
+      }
 
-    const mapId = map.id;
+      const mapId = map.id;
 
-    const comparisonScore: ComparisonScore = {
-      teamBlueScore: 0,
-      teamRedScore: 0,
-    };
+      const comparisonScore: ComparisonScore = {
+        teamBlueScore: 0,
+        teamRedScore: 0,
+      };
 
-    const teamBlueScoreObject = await db.get(`SELECT score FROM Score WHERE map_id=${mapId} AND team_id=${teamBlueId}`);
-    const teamRedScoreObject = await db.get(`SELECT score FROM Score WHERE map_id=${mapId} AND team_id=${teamRedId}`);
+      const teamBlueScoreObject = await db.get(`SELECT score FROM Score WHERE map_id=${mapId} AND team_id=${teamBlueId}`);
+      const teamRedScoreObject = await db.get(`SELECT score FROM Score WHERE map_id=${mapId} AND team_id=${teamRedId}`);
 
-    let teamBlueScore: number;
-    let teamRedScore: number;
-    if (teamBlueScoreObject === undefined) {
-      teamBlueScore = 0;
-    } else {
-      teamBlueScore = teamBlueScoreObject.score;
-    }
-    if (teamRedScoreObject === undefined) {
-      teamRedScore = 0;
-    } else {
-      teamRedScore = teamRedScoreObject.score;
-    }
+      let teamBlueScore: number;
+      let teamRedScore: number;
+      if (teamBlueScoreObject === undefined) {
+        teamBlueScore = 0;
+      } else {
+        teamBlueScore = teamBlueScoreObject.score;
+      }
+      if (teamRedScoreObject === undefined) {
+        teamRedScore = 0;
+      } else {
+        teamRedScore = teamRedScoreObject.score;
+      }
 
-    comparisonScore.teamBlueScore = teamBlueScore;
-    comparisonScore.teamRedScore = teamRedScore;
-    comparisonsScores[mapSlot] = comparisonScore;
-  });
+      comparisonScore.teamBlueScore = teamBlueScore;
+      comparisonScore.teamRedScore = teamRedScore;
+      comparisonsScores[mapSlot] = comparisonScore;
+    });
 
-  currentComparisonsTwoScoresReplicant.value = comparisonsScores;
+    currentComparisonsTwoScoresReplicant.value = comparisonsScores;
+    nodecg().sendMessage('updateComparisonTeams', '1');
+  }, 1000);
 });
 
 nodecg().listenFor('saveMatch', async (data, ack) => {
@@ -264,23 +270,15 @@ nodecg().listenFor('saveMatch', async (data, ack) => {
     }
 
     try {
-      const teamBlueScoreObject = await db.get(`SELECT * FROM Score WHERE map_id=${mapDbObject.id} AND team_id=${teamBlueId}`) as Score;
-      if (teamBlueScoreObject?.score && teamBlueScore > teamBlueScoreObject.score) {
-        await db.run(`UPDATE Score SET score=${teamBlueScore} WHERE map_id=${mapDbObject.id} AND team_id=${teamBlueId}`);
-      } else {
-        await db.run(`INSERT INTO Score (team_id, map_id, score) VALUES (${teamBlueId}, ${mapDbObject.id}, ${teamBlueScore})`);
-      }
+      await db.run(`INSERT OR IGNORE INTO Score (team_id, map_id, score) VALUES (${teamBlueId}, ${mapDbObject.id}, ${teamBlueScore})`);
+      await db.run(`UPDATE Score SET score=MAX(score, ${teamBlueScore}) WHERE map_id=${mapDbObject.id} AND team_id=${teamBlueId}`);
     } catch (e) {
       nodecg().log.error(e);
     }
 
     try {
-      const teamRedScoreObject = await db.get(`SELECT * FROM Score WHERE map_id=${mapDbObject.id} AND team_id=${teamRedId}`) as Score;
-      if (teamRedScoreObject?.score && teamRedScore > teamRedScoreObject.score) {
-        await db.run(`UPDATE Score SET score=${teamRedScore} WHERE map_id=${mapDbObject.id} AND team_id=${teamRedId}`);
-      } else {
-        await db.run(`INSERT INTO Score (team_id, map_id, score) VALUES (${teamRedId}, ${mapDbObject.id}, ${teamRedScore})`);
-      }
+      await db.run(`INSERT OR IGNORE INTO Score (team_id, map_id, score) VALUES (${teamRedId}, ${mapDbObject.id}, ${teamRedScore})`);
+      await db.run(`UPDATE Score SET score=MAX(score, ${teamRedScore}) WHERE map_id=${mapDbObject.id} AND team_id=${teamRedId}`);
     } catch (e) {
       nodecg().log.error(e);
     }
