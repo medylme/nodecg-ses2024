@@ -1,25 +1,18 @@
 # WAH 2023 - NodeCG Graphics
 
 NodeCG Graphics for the [WAH 2023 osu! tourney](https://osu.ppy.sh/community/forums/topics/1808443?n=1).
+This tourney has since concluded (and with it this repository), but I've made it public intended to be used as a rough reference.
 
-## Package Commands
+## Environment Variables
 
-- `autofix`: Automatically fix any possible linting errors using ESLint.
-- `autofix:browser`: See above, but only for browser based code.
-- `autofix:extension`: See above, but only for extension based code/typings.
+- `OSU_API_KEY`: osu! (Legacy) API key, which can be generated [here](https://osu.ppy.sh/home/account/edit#legacy-api).
+
+## Commands
+
 - `build`: Build written code for use in production.
-- `build:browser`: See above, but only for browser based code.
-- `build:extension`: See above, but only for extension based code.
 - `clean`: Clean up all built/watched files.
-- `lint`: Finds any possible linting errors using ESLint, but does not fix them.
-- `lint:browser`: See above, but only for browser based code.
-- `lint:extension`: See above, but only for extension based code/typings.
-- `prebuild`: Alias for `clean`, will automatically run before `build` if called.
-- `schema-types`: Create TypeScript typings for schemas/`Configschema.json` using `nodecg-cli`.
 - `start`: Start NodeCG.
 - `watch`: Build code and watch for changes, for use in development.
-- `watch:browser`: See above, but only for browser based code.
-- `watch:extension`: See above, but only for extension based code.
 
 ## Technical Details
 

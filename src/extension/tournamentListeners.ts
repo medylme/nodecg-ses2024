@@ -2,7 +2,7 @@
 /* eslint-disable max-len */
 /* eslint-disable import/no-extraneous-dependencies */
 /* eslint-disable @typescript-eslint/indent */
-import { Team, Map, ComparisonScore, ComparisonScores, Score } from '@nodecg-vue-ts-template/types/osu';
+import { Team, Map, ComparisonScore, ComparisonScores } from '@nodecg-vue-ts-template/types/osu';
 import { open } from 'sqlite';
 import { get as nodecg } from './util/nodecg';
 import { currentTeamsReplicant, currentComparisonPoolReplicant, currentComparisonsReplicant, currentComparisonsScoresReplicant, currentPoolsReplicant, currentComparisonTwoPoolReplicant, currentComparisonsTwoReplicant, currentComparisonsTwoScoresReplicant } from './util/replicants';
@@ -15,7 +15,7 @@ const sqlite3 = require('sqlite3').verbose();
 class Replicants {
   public static async setTeamComparisonDefaults(): Promise<void> {
     const db = await open({
-      filename: 'db/wah2023.sqlite3',
+      filename: 'db/wah2023.sqlite3', // exists in nodecg root. example db is in the root of this repo.
       driver: sqlite3.cached.Database,
     });
     const teamArray: Team[] = await db.all('SELECT * FROM Team');
