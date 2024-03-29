@@ -1,3 +1,4 @@
+<!-- eslint-disable operator-linebreak -->
 <!-- eslint-disable import/no-extraneous-dependencies -->
 <script setup lang="ts">
 import { useReplicant } from 'nodecg-vue-composable';
@@ -25,131 +26,95 @@ function getPoolTitle(code: Rounds): string {
 }
 
 const pools = {
-  Q: [
-    'NM1',
-    'NM2',
-    'NM3',
-    'NM4',
-    'NM5',
-    'HD1',
-    'HD2',
-    'HD3',
-    'HR1',
-    'HR2',
-    'HR3',
-    'DT1',
-    'DT2',
-    'DT3',
-    'TB',
-  ],
+  Q: ['AM1', 'AM2', 'AM3', 'AM4', 'TP1', 'TP2', 'TP3', 'RD1', 'RD2', 'RD3'],
   RO16: [
-    'NM1',
-    'NM2',
-    'NM3',
-    'NM4',
-    'NM5',
-    'NM6',
-    'HD1',
-    'HD2',
-    'HD3',
-    'HR1',
-    'HR2',
-    'HR3',
-    'DT1',
-    'DT2',
-    'DT3',
-    'FM1',
-    'FM2',
-    'TB',
+    'AM1',
+    'AM2',
+    'AM3',
+    'AM4',
+    'AM5',
+    'AM6',
+    'TP1',
+    'TP2',
+    'TP3',
+    'TP4',
+    'RD1',
+    'RD2',
+    'RD3',
+    'RD4',
   ],
   QF: [
-    'NM1',
-    'NM2',
-    'NM3',
-    'NM4',
-    'NM5',
-    'NM6',
-    'HD1',
-    'HD2',
-    'HD3',
-    'HR1',
-    'HR2',
-    'HR3',
-    'DT1',
-    'DT2',
-    'DT3',
-    'FM1',
-    'FM2',
-    'TB',
+    'AM1',
+    'AM2',
+    'AM3',
+    'AM4',
+    'AM5',
+    'AM6',
+    'TP1',
+    'TP2',
+    'TP3',
+    'TP4',
+    'RD1',
+    'RD2',
+    'RD3',
+    'RD4',
   ],
   SF: [
-    'NM1',
-    'NM2',
-    'NM3',
-    'NM4',
-    'NM5',
-    'NM6',
-    'NM7',
-    'HD1',
-    'HD2',
-    'HD3',
-    'HR1',
-    'HR2',
-    'HR3',
-    'DT1',
-    'DT2',
-    'DT3',
-    'DT4',
-    'FM1',
-    'FM2',
-    'FM3',
-    'TB',
+    'AM1',
+    'AM2',
+    'AM3',
+    'AM4',
+    'AM5',
+    'AM6',
+    'AM7',
+    'TP1',
+    'TP2',
+    'TP3',
+    'TP4',
+    'RD1',
+    'RD2',
+    'RD3',
+    'RD4',
   ],
   F: [
-    'NM1',
-    'NM2',
-    'NM3',
-    'NM4',
-    'NM5',
-    'NM6',
-    'NM7',
-    'HD1',
-    'HD2',
-    'HD3',
-    'HR1',
-    'HR2',
-    'HR3',
-    'DT1',
-    'DT2',
-    'DT3',
-    'DT4',
-    'FM1',
-    'FM2',
-    'FM3',
-    'TB',
+    'AM1',
+    'AM2',
+    'AM3',
+    'AM4',
+    'AM5',
+    'AM6',
+    'AM7',
+    'AM8',
+    'TP1',
+    'TP2',
+    'TP3',
+    'TP4',
+    'TP5',
+    'RD1',
+    'RD2',
+    'RD3',
+    'RD4',
+    'RD5',
   ],
   GF: [
-    'NM1',
-    'NM2',
-    'NM3',
-    'NM4',
-    'NM5',
-    'NM6',
-    'NM7',
-    'HD1',
-    'HD2',
-    'HD3',
-    'HR1',
-    'HR2',
-    'HR3',
-    'DT1',
-    'DT2',
-    'DT3',
-    'DT4',
-    'FM1',
-    'FM2',
-    'FM3',
-    'TB',
+    'AM1',
+    'AM2',
+    'AM3',
+    'AM4',
+    'AM5',
+    'AM6',
+    'AM7',
+    'AM8',
+    'TP1',
+    'TP2',
+    'TP3',
+    'TP4',
+    'TP5',
+    'RD1',
+    'RD2',
+    'RD3',
+    'RD4',
+    'RD5',
   ],
 };
 const poolOptions = Object.keys(pools).map((pool) => ({
@@ -160,7 +125,7 @@ const poolOptions = Object.keys(pools).map((pool) => ({
 class Replicants {
   public static currentPoolStringReplicant = useReplicant<string>(
     'currentPoolString',
-    'wah2023',
+    'ses2024',
     {
       defaultValue: 'Qualifiers',
     },
@@ -168,19 +133,27 @@ class Replicants {
 
   public static currentPoolCodeReplicant = useReplicant<string>(
     'currentPoolCode',
-    'wah2023',
+    'ses2024',
     {
       defaultValue: 'Q',
     },
   );
 
-  public static currentMapReplicant = useReplicant<string>('currentMap', 'wah2023', {
-    defaultValue: 'NM1',
-  });
+  public static currentMapReplicant = useReplicant<string>(
+    'currentMap',
+    'ses2024',
+    {
+      defaultValue: 'AM1',
+    },
+  );
 
   // Save to Program
   public static savePoolMap(pool: string, map: string) {
-    if (this.currentPoolCodeReplicant === undefined || this.currentPoolStringReplicant === undefined || this.currentMapReplicant === undefined) {
+    if (
+      this.currentPoolCodeReplicant === undefined ||
+      this.currentPoolStringReplicant === undefined ||
+      this.currentMapReplicant === undefined
+    ) {
       return;
     }
 
@@ -193,26 +166,39 @@ class Replicants {
   }
 }
 
-const selectedPoolModel = ref(Replicants.currentPoolCodeReplicant?.data as Rounds);
+const selectedPoolModel = ref(
+  Replicants.currentPoolCodeReplicant?.data as Rounds,
+);
 const selectedPool = ref(Replicants.currentPoolCodeReplicant?.data as Rounds);
 const selectedMap = ref(Replicants.currentMapReplicant?.data as string);
-
 </script>
 
 <template>
-  <div class="flex items-center justify-center">
+  <div class="flex flex-col items-center justify-center">
     <div class="">
       <p>
-        Current Pool: <span class="text-bold">{{ Replicants.currentPoolStringReplicant?.data }}</span>
+        Current Pool:
+        <span class="text-bold">{{
+          Replicants.currentPoolStringReplicant?.data
+        }}</span>
         <br />
-        Current Map: <span class="text-bold">{{ Replicants.currentMapReplicant?.data }}</span>
+        Current Map:
+        <span class="text-bold">{{
+          Replicants.currentMapReplicant?.data
+        }}</span>
       </p>
     </div>
     <div class="q-pa-md">
-      <QSelect filled @update:modelValue="newValue => selectedPool = newValue.value" v-model="selectedPoolModel"
-        :options="poolOptions" label="Pool" stack-label />
+      <QSelect
+        filled
+        @update:modelValue="(newValue) => (selectedPool = newValue.value)"
+        v-model="selectedPoolModel"
+        :options="poolOptions"
+        label="Pool"
+        stack-label
+      />
       <br />
-      <QExpansionItem expand-seperator label="Map (only for showcase overlay)">
+      <QExpansionItem expand-seperator label="Slot">
         <ul class="column">
           <li v-for="map in pools[selectedPool]" :key="map">
             <QRadio v-model="selectedMap" :val="map" :label="map" />
@@ -220,6 +206,10 @@ const selectedMap = ref(Replicants.currentMapReplicant?.data as string);
         </ul>
       </QExpansionItem>
     </div>
-    <QBtn color="blue" label="Apply" @click="Replicants.savePoolMap(selectedPool, selectedMap)" />
+    <QBtn
+      color="blue"
+      label="Apply"
+      @click="Replicants.savePoolMap(selectedPool, selectedMap)"
+    />
   </div>
 </template>

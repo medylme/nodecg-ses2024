@@ -1,5 +1,5 @@
 {
-  "name": "wah2023",
+  "name": "ses2024",
   "version": "1.0.0",
   "description": "Template for NodeCG bundles that use Vue.js and TypeScript.",
   "homepage": "https://github.com/zoton2/nodecg-vue-ts-template#readme",
@@ -81,49 +81,26 @@
     "dashboardPanels": [
       {
         "name": "mapSelector",
-        "title": "Now Playing Control",
+        "title": "Current Map",
         "file": "mapSelector.html",
         "width": 2
-      },
-      {
-        "name": "teamComparison",
-        "title": "Team Comparison Control (Slot 1)",
-        "file": "teamComparison.html",
-        "width": 3
-      },
-      {
-        "name": "teamComparisonTwo",
-        "title": "Team Comparison Control (Slot 2)",
-        "file": "teamComparisonTwo.html",
-        "width": 3
-      },
-      {
-        "name": "matchImporter",
-        "title": "Match Importer",
-        "file": "matchImporter.html",
-        "width": 4
       }
     ],
     "graphics": [
       {
-        "file": "showcaseNowPlaying.html",
+        "file": "showcaseBottom.html",
         "width": 1920,
-        "height": 1080
+        "height": 125
+      },
+      {
+        "file": "showcaseTop.html",
+        "width": 1920,
+        "height": 200
       },
       {
         "file": "showcaseReplayer.html",
         "width": 500,
         "height": 750
-      },
-      {
-        "file": "teamComparison.html",
-        "width": 1920,
-        "height": 1080
-      },
-      {
-        "file": "teamComparisonTwo.html",
-        "width": 1920,
-        "height": 1080
       }
     ]
   }

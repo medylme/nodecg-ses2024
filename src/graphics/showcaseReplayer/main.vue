@@ -1,3 +1,4 @@
+<!-- eslint-disable operator-linebreak -->
 <!-- eslint-disable import/no-extraneous-dependencies -->
 <script setup lang="ts">
 import ReconnectingWebSocket from 'reconnecting-websocket';
@@ -48,8 +49,10 @@ socket.onmessage = (event) => {
     misses.value = data.resultsScreen['0'];
 
     // calculate acc
-    const accFormulaTop = (300 * amount300.value) + (100 * amount100.value) + (50 * amount50.value);
-    const accFormulaBottom = (300 * (amount300.value + amount100.value + amount50.value + misses.value));
+    const accFormulaTop =
+      300 * amount300.value + 100 * amount100.value + 50 * amount50.value;
+    const accFormulaBottom =
+      300 * (amount300.value + amount100.value + amount50.value + misses.value);
     const accFormula = (accFormulaTop / accFormulaBottom) * 100;
     acc.value = Number(accFormula.toFixed(2));
   }
@@ -59,60 +62,88 @@ socket.onmessage = (event) => {
     scoreV1String.value = '';
   }
 };
-
 </script>
 
 <template>
   <div id="container" class="column q-ma-lg items-center justify-center">
     <div class="flex gap-2 items-center justify-center">
       <div class="column items-center justify-center">
-        <h3 class="q-mx-none q-my-md bg-[#fbb03b] text-[#31272c] text-3xl py-2 px-4 rounded-xl">replayer</h3>
+        <h3
+          class="q-mx-none q-my-md bg-[#051374] text-white text-3xl py-2 px-4 rounded-xl"
+        >
+          replayer
+        </h3>
         <p class="text-h4">{{ replayerName }}</p>
       </div>
       <div class="row items-start justify-start q-mx-sm">
         <div class="q-mx-lg column items-center justify-center">
-          <h4 class="q-mx-md q-my-md bg-[#fbb03b] text-[#31272c] text-3xl py-2 px-4 rounded-xl">300</h4>
+          <h4
+            class="q-mx-md q-my-md bg-[#051374] text-white text-3xl py-2 px-4 rounded-xl"
+          >
+            300
+          </h4>
           <p class="text-h4">
-            <Vue3Odometer format='d' class="o-text" :value="amount300" />
+            <Vue3Odometer format="d" class="o-text" :value="amount300" />
           </p>
         </div>
         <div class="q-mx-lg column items-center justify-center">
-          <h4 class="q-mx-md q-my-md bg-[#fbb03b] text-[#31272c] text-3xl py-2 px-4 rounded-xl">100</h4>
+          <h4
+            class="q-mx-md q-my-md bg-[#051374] text-white text-3xl py-2 px-4 rounded-xl"
+          >
+            100
+          </h4>
           <p class="text-h4">
-            <Vue3Odometer format='d' class="o-text" :value="amount100" />
+            <Vue3Odometer format="d" class="o-text" :value="amount100" />
           </p>
         </div>
       </div>
       <div class="row items-start justify-start q-mx-sm">
         <div class="q-mx-lg column items-center justify-center">
-          <h4 class="q-mx-md q-my-md bg-[#fbb03b] text-[#31272c] text-3xl py-2 px-4 rounded-xl">50</h4>
+          <h4
+            class="q-mx-md q-my-md bg-[#051374] text-white text-3xl py-2 px-4 rounded-xl"
+          >
+            50
+          </h4>
           <p class="text-h4">
-            <Vue3Odometer format='d' class="o-text" :value="amount50" />
+            <Vue3Odometer format="d" class="o-text" :value="amount50" />
           </p>
         </div>
         <div class="q-mx-lg column items-center justify-center">
-          <h4 class="q-mx-md q-my-md bg-[#fbb03b] text-[#31272c] text-3xl py-2 px-4 rounded-xl">miss</h4>
+          <h4
+            class="q-mx-md q-my-md bg-[#051374] text-white text-3xl py-2 px-4 rounded-xl"
+          >
+            miss
+          </h4>
           <p class="text-h4">
-            <Vue3Odometer format='d' class="o-text" :value="misses" />
+            <Vue3Odometer format="d" class="o-text" :value="misses" />
           </p>
         </div>
       </div>
       <div class="row items-start justify-start q-mx-sm">
         <div class="q-mx-xl column items-center justify-center">
-          <h4 class="q-my-md bg-[#fbb03b] text-[#31272c] text-3xl py-2 px-4 rounded-xl">combo</h4>
+          <h4
+            class="q-my-md bg-[#051374] text-white text-3xl py-2 px-4 rounded-xl"
+          >
+            combo
+          </h4>
           <p class="text-h4">
-            <Vue3Odometer format='d' class="o-text" :value="maxcombo" />
+            <Vue3Odometer format="d" class="o-text" :value="maxcombo" />
           </p>
         </div>
         <div class="q-mx-xl column items-center justify-center">
-          <h4 class="q-my-md bg-[#fbb03b] text-[#31272c] text-3xl py-2 px-4 rounded-xl">acc</h4>
-          <p class="text-h4">
-            <Vue3Odometer class="o-text" :value="acc" />%
-          </p>
+          <h4
+            class="q-my-md bg-[#051374] text-white text-3xl py-2 px-4 rounded-xl"
+          >
+            acc
+          </h4>
+          <p class="text-h4"><Vue3Odometer class="o-text" :value="acc" />%</p>
         </div>
       </div>
       <div class="column items-center justify-center q-mx-lg">
-        <h4 class="q-mx-none q-my-md bg-[#fbb03b] text-[#31272c] text-3xl py-2 px-4 rounded-xl">score {{ scoreV1String }}
+        <h4
+          class="q-mx-none q-my-md bg-[#051374] text-white text-3xl py-2 px-4 rounded-xl"
+        >
+          score {{ scoreV1String }}
         </h4>
         <p class="text-h4">
           <Vue3Odometer class="o-text" :value="score" />

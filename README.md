@@ -1,7 +1,6 @@
-# WAH 2023 - NodeCG Graphics
+# SES 2023 - NodeCG Graphics
 
-NodeCG Graphics for the [WAH 2023 osu! tourney](https://osu.ppy.sh/community/forums/topics/1808443?n=1).
-This tourney has since concluded (and with it this repository), but I've made it public intended to be used as a rough reference.
+NodeCG Graphics for the [SES 2023 osu! tourney](https://osu.ppy.sh/community/forums/topics/1890803?n=1).
 
 ## Environment Variables
 

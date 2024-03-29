@@ -1,9 +1,7 @@
 /* eslint-disable max-len */
 // eslint-disable-next-line import/no-extraneous-dependencies
 import type { ExampleReplicant } from '@nodecg-vue-ts-template/types/schemas';
-import { Team, ComparisonScores } from '@nodecg-vue-ts-template/types/osu';
 import { get as nodecg } from './nodecg';
-import pools from './pools';
 
 /**
  * This is where you can declare all your replicant to import easily into other files,
@@ -14,26 +12,10 @@ import pools from './pools';
 // eslint-disable-next-line import/prefer-default-export
 export const exampleReplicant = nodecg().Replicant<ExampleReplicant>('exampleReplicant');
 
-export const currentTeamsReplicant = nodecg().Replicant<Team[]>('currentTeamsReplicant');
-
-export const currentComparisonPoolReplicant = nodecg().Replicant<string>('currentComparisonPool', {
-  defaultValue: 'RO16',
+export const currentPoolReplicant = nodecg().Replicant<string>('currentPool', {
+  defaultValue: 'Q',
 });
 
-export const currentComparisonsReplicant = nodecg().Replicant<Team[]>('currentComparisons');
-
-export const currentComparisonsScoresReplicant = nodecg().Replicant<ComparisonScores>('currentComparisonsScores');
-
-export const currentTeamsTwoReplicant = nodecg().Replicant<Team[]>('currentTeamsReplicantTwo');
-
-export const currentComparisonTwoPoolReplicant = nodecg().Replicant<string>('currentComparisonTwoPool', {
-  defaultValue: 'RO16',
-});
-
-export const currentComparisonsTwoReplicant = nodecg().Replicant<Team[]>('currentComparisonsTwo');
-
-export const currentComparisonsTwoScoresReplicant = nodecg().Replicant<ComparisonScores>('currentComparisonsTwoScores');
-
-export const currentPoolsReplicant = nodecg().Replicant<string[]>('currentPools', {
-  defaultValue: pools[currentComparisonPoolReplicant.value],
+export const currentSlotReplicant = nodecg().Replicant<string>('currentSlot', {
+  defaultValue: 'AM1',
 });

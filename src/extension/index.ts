@@ -3,7 +3,7 @@
 // This must go first so we can use module aliases!
 /* eslint-disable import/first */
 // eslint-disable-next-line @typescript-eslint/no-var-requires
-require('module-alias').addAlias('nodecg-wah2023', require('path').join(__dirname, '.'));
+require('module-alias').addAlias('nodecg-ses2024', require('path').join(__dirname, '.'));
 
 import 'dotenv/config';
 import type { NodeCG } from 'nodecg-types/types/server';
@@ -15,5 +15,4 @@ export = (nodecg: NodeCG): void => {
    * things to be loaded *after* the NodeCG context is set.
    */
   set(nodecg);
-  require('./tournamentListeners');
 };

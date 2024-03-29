@@ -26,4 +26,5 @@ export default defineConfig({
       '@nodecg-vue-ts-template': `${__dirname}/src/`,
     },
   },
+  publicDir: 'dynamic_assets',
 });
