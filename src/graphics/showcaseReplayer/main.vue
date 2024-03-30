@@ -78,98 +78,82 @@ socket.onmessage = (event) => {
 </script>
 
 <template>
-  <div id="container" class="column q-ma-lg items-center justify-center">
-    <div class="flex gap-2 items-center justify-center">
-      <div class="flex gap-8 items-center justify-center">
-        <div class="column items-center justify-center">
-          <h3
-            class="q-mx-none q-my-md bg-[#051374] text-white text-3xl py-2 px-4 rounded-full"
-          >
+  <div id="container" class="flex flex-col items-center justify-center">
+    <div class="flex flex-col gap-8 items-center justify-center">
+      <div class="flex items-center justify-center">
+        <div class="flex flex-col gap-4 items-center justify-center">
+          <h3 class="bg-[#051374] text-white text-4xl py-2 px-4 rounded-full">
             replayer
           </h3>
-          <p class="text-h4">{{ replayerName }}</p>
+          <p class="text-4xl">{{ replayerName }}</p>
         </div>
       </div>
-      <div class="row items-start justify-start q-mx-sm">
-        <div class="q-mx-lg column items-center justify-center">
-          <h4
-            class="q-mx-md q-my-md bg-[#051374] text-white text-3xl py-2 px-4 rounded-full"
-          >
+      <div class="flex flex-row gap-16 items-center justify-center">
+        <div class="flex flex-col gap-2 items-center justify-center">
+          <h4 class="bg-[#051374] text-white text-3xl py-2 px-4 rounded-full">
             300
           </h4>
-          <p class="text-h4">
+          <p class="text-3xl">
             <Vue3Odometer format="d" class="o-text" :value="amount300" />
           </p>
         </div>
-        <div class="q-mx-lg column items-center justify-center">
-          <h4
-            class="q-mx-md q-my-md bg-[#051374] text-white text-3xl py-2 px-4 rounded-full"
-          >
+        <div class="flex flex-col gap-2 items-center justify-center">
+          <h4 class="bg-[#051374] text-white text-3xl py-2 px-4 rounded-full">
             100
           </h4>
-          <p class="text-h4">
+          <p class="text-3xl">
             <Vue3Odometer format="d" class="o-text" :value="amount100" />
           </p>
         </div>
       </div>
-      <div class="row items-start justify-start q-mx-sm">
-        <div class="q-mx-lg column items-center justify-center">
-          <h4
-            class="q-mx-md q-my-md bg-[#051374] text-white text-3xl py-2 px-4 rounded-full"
-          >
+      <div class="flex flex-row gap-16 items-center justify-center">
+        <div class="flex flex-col gap-2 items-center justify-center">
+          <h4 class="bg-[#051374] text-white text-3xl py-2 px-4 rounded-full">
             50
           </h4>
-          <p class="text-h4">
+          <p class="text-3xl">
             <Vue3Odometer format="d" class="o-text" :value="amount50" />
           </p>
         </div>
-        <div class="q-mx-lg column items-center justify-center">
-          <h4
-            class="q-mx-md q-my-md bg-[#051374] text-white text-3xl py-2 px-4 rounded-full"
-          >
+        <div class="flex flex-col gap-2 items-center justify-center">
+          <h4 class="bg-[#051374] text-white text-3xl py-2 px-4 rounded-full">
             miss
           </h4>
-          <p class="text-h4">
+          <p class="text-3xl">
             <Vue3Odometer format="d" class="o-text" :value="misses" />
           </p>
         </div>
       </div>
-      <div class="row items-start justify-start q-mx-sm">
-        <div class="q-mx-lg column items-center justify-center">
-          <h4
-            class="q-my-md bg-[#051374] text-white text-3xl py-2 px-4 rounded-full"
-          >
+      <div class="flex gap-8 items-center justify-center">
+        <div class="flex flex-col gap-2 items-center justify-center">
+          <h4 class="bg-[#051374] text-white text-3xl py-2 px-4 rounded-full">
             combo
           </h4>
-          <p class="text-h4">
-            <Vue3Odometer format="d" class="o-text" :value="maxcombo" />
+          <p class="text-3xl">
+            <Vue3Odometer format="d" class="o-text" :value="maxcombo" />x
           </p>
         </div>
-        <div class="q-mx-lg column items-center justify-center">
+        <div class="flex flex-col gap-2 items-center justify-center">
           <h4
             class="q-my-md bg-[#051374] text-white text-3xl py-2 px-4 rounded-full"
           >
             acc
           </h4>
-          <p class="text-h4"><Vue3Odometer class="o-text" :value="acc" />%</p>
+          <p class="text-3xl"><Vue3Odometer class="o-text" :value="acc" />%</p>
         </div>
       </div>
       <div class="flex flex-row items-center justify-center gap-8">
-        <div class="flex flex-col items-center justify-center">
-          <h3
-            class="q-mx-none q-my-md bg-[#051374] text-white text-3xl py-2 px-4 rounded-full"
-          >
+        <div class="flex flex-col gap-2 items-center justify-center">
+          <h3 class="text-3xl bg-[#051374] text-white py-2 px-4 rounded-full">
             mods
           </h3>
-          <p class="text-h4">{{ mods }}</p>
+          <p class="text-3xl">{{ mods }}</p>
         </div>
-        <div class="flex flex-col items-center justify-center">
-          <h4
-            class="q-mx-none q-my-md bg-[#051374] text-white text-3xl py-2 px-4 rounded-full"
-          >
+        <div class="flex flex-col gap-2 items-center justify-center">
+          <h4 class="text-3xl bg-[#051374] text-white py-2 px-4 rounded-full">
             score {{ scoreV1String }}
           </h4>
-          <p class="text-h4">
+          <p class="text-3xl">
             <Vue3Odometer class="o-text" :value="score" />
           </p>
         </div>
