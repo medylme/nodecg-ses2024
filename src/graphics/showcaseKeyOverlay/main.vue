@@ -59,7 +59,7 @@ socket.onmessage = (event) => {
   >
     <div class="flex gap-2 items-center justify-center">
       <div
-        class="flex flex-col gap-2 items-center justify-center bg-[#051372] py-4 px-3 rounded-full"
+        class="flex flex-row gap-2 items-center justify-center bg-[#051372] py-2 px-5 rounded-full"
       >
         <div
           class="flex flex-col items-center justify-center transition-transform duration-25"
