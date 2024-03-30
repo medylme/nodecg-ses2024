@@ -1,6 +1,6 @@
-# SES 2023 - NodeCG Graphics
+# SES 2024 - NodeCG Graphics
 
-NodeCG Graphics for the [SES 2023 osu! tourney](https://osu.ppy.sh/community/forums/topics/1890803?n=1).
+NodeCG Graphics for the [SES 2024 osu! tourney](https://osu.ppy.sh/community/forums/topics/1890803?n=1).
 
 ## Environment Variables
 
