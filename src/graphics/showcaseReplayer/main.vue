@@ -7,7 +7,8 @@ import 'odometer/themes/odometer-theme-default.css';
 import { ref } from 'vue';
 
 // values
-const replayerName = ref('');
+const replayerName = ref('...');
+const mods = ref('...');
 const amount300 = ref(0);
 const amount100 = ref(0);
 const amount50 = ref(0);
@@ -29,6 +30,18 @@ socket.onmessage = (event) => {
 
   if (data.resultsScreen.name !== undefined) {
     replayerName.value = data.resultsScreen.name;
+  } else {
+    replayerName.value = '...';
+  }
+  if (data.resultsScreen.mods.str !== undefined) {
+    // remove V2 and NF from mods
+    const formattedString = data.resultsScreen.mods.str
+      .replace('V2', '')
+      .replace('NF', '');
+
+    mods.value = formattedString;
+  } else {
+    mods.value = '...';
   }
   if (data.resultsScreen.maxCombo !== undefined) {
     maxcombo.value = data.resultsScreen.maxCombo;
@@ -67,18 +80,20 @@ socket.onmessage = (event) => {
 <template>
   <div id="container" class="column q-ma-lg items-center justify-center">
     <div class="flex gap-2 items-center justify-center">
-      <div class="column items-center justify-center">
-        <h3
-          class="q-mx-none q-my-md bg-[#051374] text-white text-3xl py-2 px-4 rounded-xl"
-        >
-          replayer
-        </h3>
-        <p class="text-h4">{{ replayerName }}</p>
+      <div class="flex gap-8 items-center justify-center">
+        <div class="column items-center justify-center">
+          <h3
+            class="q-mx-none q-my-md bg-[#051374] text-white text-3xl py-2 px-4 rounded-full"
+          >
+            replayer
+          </h3>
+          <p class="text-h4">{{ replayerName }}</p>
+        </div>
       </div>
       <div class="row items-start justify-start q-mx-sm">
         <div class="q-mx-lg column items-center justify-center">
           <h4
-            class="q-mx-md q-my-md bg-[#051374] text-white text-3xl py-2 px-4 rounded-xl"
+            class="q-mx-md q-my-md bg-[#051374] text-white text-3xl py-2 px-4 rounded-full"
           >
             300
           </h4>
@@ -88,7 +103,7 @@ socket.onmessage = (event) => {
         </div>
         <div class="q-mx-lg column items-center justify-center">
           <h4
-            class="q-mx-md q-my-md bg-[#051374] text-white text-3xl py-2 px-4 rounded-xl"
+            class="q-mx-md q-my-md bg-[#051374] text-white text-3xl py-2 px-4 rounded-full"
           >
             100
           </h4>
@@ -100,7 +115,7 @@ socket.onmessage = (event) => {
       <div class="row items-start justify-start q-mx-sm">
         <div class="q-mx-lg column items-center justify-center">
           <h4
-            class="q-mx-md q-my-md bg-[#051374] text-white text-3xl py-2 px-4 rounded-xl"
+            class="q-mx-md q-my-md bg-[#051374] text-white text-3xl py-2 px-4 rounded-full"
           >
             50
           </h4>
@@ -110,7 +125,7 @@ socket.onmessage = (event) => {
         </div>
         <div class="q-mx-lg column items-center justify-center">
           <h4
-            class="q-mx-md q-my-md bg-[#051374] text-white text-3xl py-2 px-4 rounded-xl"
+            class="q-mx-md q-my-md bg-[#051374] text-white text-3xl py-2 px-4 rounded-full"
           >
             miss
           </h4>
@@ -120,9 +135,9 @@ socket.onmessage = (event) => {
         </div>
       </div>
       <div class="row items-start justify-start q-mx-sm">
-        <div class="q-mx-xl column items-center justify-center">
+        <div class="q-mx-lg column items-center justify-center">
           <h4
-            class="q-my-md bg-[#051374] text-white text-3xl py-2 px-4 rounded-xl"
+            class="q-my-md bg-[#051374] text-white text-3xl py-2 px-4 rounded-full"
           >
             combo
           </h4>
@@ -130,24 +145,34 @@ socket.onmessage = (event) => {
             <Vue3Odometer format="d" class="o-text" :value="maxcombo" />
           </p>
         </div>
-        <div class="q-mx-xl column items-center justify-center">
+        <div class="q-mx-lg column items-center justify-center">
           <h4
-            class="q-my-md bg-[#051374] text-white text-3xl py-2 px-4 rounded-xl"
+            class="q-my-md bg-[#051374] text-white text-3xl py-2 px-4 rounded-full"
           >
             acc
           </h4>
           <p class="text-h4"><Vue3Odometer class="o-text" :value="acc" />%</p>
         </div>
       </div>
-      <div class="column items-center justify-center q-mx-lg">
-        <h4
-          class="q-mx-none q-my-md bg-[#051374] text-white text-3xl py-2 px-4 rounded-xl"
-        >
-          score {{ scoreV1String }}
-        </h4>
-        <p class="text-h4">
-          <Vue3Odometer class="o-text" :value="score" />
-        </p>
+      <div class="flex flex-row items-center justify-center gap-8">
+        <div class="flex flex-col items-center justify-center">
+          <h3
+            class="q-mx-none q-my-md bg-[#051374] text-white text-3xl py-2 px-4 rounded-full"
+          >
+            mods
+          </h3>
+          <p class="text-h4">{{ mods }}</p>
+        </div>
+        <div class="flex flex-col items-center justify-center">
+          <h4
+            class="q-mx-none q-my-md bg-[#051374] text-white text-3xl py-2 px-4 rounded-full"
+          >
+            score {{ scoreV1String }}
+          </h4>
+          <p class="text-h4">
+            <Vue3Odometer class="o-text" :value="score" />
+          </p>
+        </div>
       </div>
     </div>
   </div>
