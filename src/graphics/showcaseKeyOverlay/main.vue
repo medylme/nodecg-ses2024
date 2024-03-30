@@ -33,12 +33,6 @@ socket.onmessage = (event) => {
   keyOverlayVisible.value = true;
 
   if (data.gameplay.keyOverlay !== undefined) {
-    /*
-    if (Date.now() - lastKeyValueUpdate < 100) {
-      return;
-    }
-    */
-
     k1Pressed.value = data.gameplay.keyOverlay.k1.isPressed;
     k1Value.value = data.gameplay.keyOverlay.k1.count;
 
@@ -57,7 +51,7 @@ socket.onmessage = (event) => {
 <template>
   <div
     id="container"
-    class="column q-ma-lg items-center justify-center transition-opacity duration-500"
+    class="column q-ma-lg items-center justify-center transition-opacity duration-250"
     :class="{
       'opacity-100': keyOverlayVisible,
       'opacity-0': !keyOverlayVisible,
@@ -68,7 +62,7 @@ socket.onmessage = (event) => {
         class="flex flex-col gap-2 items-center justify-center bg-[#051372] py-4 px-3 rounded-full"
       >
         <div
-          class="flex flex-col items-center justify-center transition-transform duration-200 ease-in-out"
+          class="flex flex-col items-center justify-center transition-transform duration-25"
           :class="{
             'text-[#ffe000] scale-90': k1Pressed,
             'text-white': !k1Pressed,
@@ -80,7 +74,7 @@ socket.onmessage = (event) => {
             :value="k1Value"
           />
           <div
-            class="w-[2rem] h-[3px] -translate-y-0.5 transition-colors duration-200 rounded-full"
+            class="w-[2rem] h-[3px] -translate-y-0.5 transition-colors duration-25 rounded-full"
             :class="{
               'bg-[#ffe000]': k1Pressed,
               'bg-white': !k1Pressed,
@@ -88,7 +82,7 @@ socket.onmessage = (event) => {
           ></div>
         </div>
         <div
-          class="flex flex-col items-center justify-center transition-transform duration-200 ease-in-out"
+          class="flex flex-col items-center justify-center transition-transform duration-25"
           :class="{
             'text-[#ffe000] scale-90': k2Pressed,
             'text-white': !k2Pressed,
@@ -100,7 +94,7 @@ socket.onmessage = (event) => {
             :value="k2Value"
           />
           <div
-            class="w-[2rem] h-[3px] -translate-y-0.5 transition-colors duration-200 rounded-full"
+            class="w-[2rem] h-[3px] -translate-y-0.5 transition-colors duration-25 rounded-full"
             :class="{
               'bg-[#ffe000]': k2Pressed,
               'bg-white': !k2Pressed,
@@ -108,7 +102,7 @@ socket.onmessage = (event) => {
           ></div>
         </div>
         <div
-          class="flex flex-col items-center justify-center transition-transform duration-200 ease-in-out"
+          class="flex flex-col items-center justify-center transition-transform duration-25"
           :class="{
             'text-[#ffe000] scale-90': m1Pressed,
             'text-white': !m1Pressed,
@@ -120,7 +114,7 @@ socket.onmessage = (event) => {
             :value="m1Value"
           />
           <div
-            class="w-[2rem] h-[3px] -translate-y-0.5 transition-colors duration-200 rounded-full"
+            class="w-[2rem] h-[3px] -translate-y-0.5 transition-colors duration-25 rounded-full"
             :class="{
               'bg-[#ffe000]': m1Pressed,
               'bg-white': !m1Pressed,
@@ -128,7 +122,7 @@ socket.onmessage = (event) => {
           ></div>
         </div>
         <div
-          class="flex flex-col items-center justify-center transition-transform duration-200 ease-in-out"
+          class="flex flex-col items-center justify-center transition-transform duration-25"
           :class="{
             'text-[#ffe000] scale-90': m2Pressed,
             'text-white': !m2Pressed,
@@ -140,7 +134,7 @@ socket.onmessage = (event) => {
             :value="m2Value"
           />
           <div
-            class="w-[2rem] h-[3px] -translate-y-0.5 transition-colors duration-200 rounded-full"
+            class="w-[2rem] h-[3px] -translate-y-0.5 transition-colors duration-25 rounded-full"
             :class="{
               'bg-[#ffe000]': m2Pressed,
               'bg-white': !m2Pressed,
@@ -157,7 +151,7 @@ socket.onmessage = (event) => {
   -webkit-transition: -webkit-transform 200ms !important;
   -moz-transition: -moz-transform 200ms !important;
   -ms-transition: -ms-transform 200ms !important;
-  -o-transition: -o-transform 202ms !important;
+  -o-transition: -o-transform 200ms !important;
   transition: transform 200ms !important;
 }
 </style>
