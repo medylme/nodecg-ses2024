@@ -1,6 +1,7 @@
 # SES 2024 - NodeCG Graphics
 
 NodeCG Graphics for the [SES 2024 osu! tourney](https://osu.ppy.sh/community/forums/topics/1890803?n=1).
+Originally forked from [nodecg-wah2023](https://github.com/medylme/nodecg-wah2023).
 
 ## Environment Variables
 
