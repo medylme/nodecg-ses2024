@@ -1,0 +1,111 @@
+<!-- eslint-disable operator-linebreak -->
+<!-- eslint-disable import/no-extraneous-dependencies -->
+<script setup lang="ts">
+import ReconnectingWebSocket from 'reconnecting-websocket';
+import Vue3Odometer from 'vue3-odometer';
+import 'odometer/themes/odometer-theme-default.css';
+import { ref } from 'vue';
+
+// values
+const overlayVisible = ref(false);
+
+const currentCombo = ref(0);
+const currentAccWhole = ref(0);
+const currentAccDecimal = ref(0);
+
+// gosumemory websocket
+const socket = new ReconnectingWebSocket('ws://localhost:24050/ws');
+socket.onmessage = (event) => {
+  const data = JSON.parse(event.data);
+
+  // hide menu if not playing
+  if (data.menu.state !== 2) {
+    overlayVisible.value = false;
+    return;
+  }
+
+  overlayVisible.value = true;
+
+  if (data.gameplay.combo !== undefined) {
+    currentCombo.value = data.gameplay.combo.current;
+  }
+  if (data.gameplay.accuracy !== undefined) {
+    const stringValue = data.gameplay.accuracy.toString();
+    if (data.gameplay.accuracy === 100) {
+      currentAccWhole.value = 100;
+      currentAccDecimal.value = 0;
+      return;
+    }
+
+    const split = stringValue.split('.');
+    const whole = parseInt(split[0], 10);
+    let decimal = parseInt(split[1], 10);
+    // assure decimals are always 2 digits
+    if (decimal < 10) {
+      decimal *= 10;
+    }
+
+    currentAccWhole.value = whole;
+    currentAccDecimal.value = decimal;
+  }
+};
+</script>
+
+<template>
+  <div
+    id="container"
+    class="flex items-center justify-center transition-opacity duration-250"
+    :class="{
+      'opacity-100': overlayVisible,
+      'opacity-0': !overlayVisible,
+    }"
+  >
+    <div class="flex flex-row gap-4 items-center justify-center">
+      <div
+        class="flex flex-row gap-1 items-center justify-center bg-[#051372] py-4 px-5 rounded-full text-white text-3xl font-black"
+      >
+        <Vue3Odometer
+          format="d"
+          class="o-text transition-colors duration-200"
+          :value="currentCombo"
+        />
+        <p>x</p>
+      </div>
+      <div
+        class="flex flex-row gap-1 items-center justify-center bg-[#051372] py-4 px-5 rounded-full text-white text-3xl font-black"
+      >
+        <div class="flex flex-row items-center justify-center">
+          <Vue3Odometer
+            format="d"
+            class="o-text transition-colors duration-200"
+            :value="currentAccWhole"
+          />
+          <div
+            class="flex flex-row items-start justify-center"
+            :class="{
+              hidden: currentAccWhole === 100,
+            }"
+          >
+            <p>.</p>
+            <Vue3Odometer
+              format="d"
+              class="o-text transition-colors duration-200"
+              :value="currentAccDecimal"
+            />
+          </div>
+        </div>
+        <p>%</p>
+      </div>
+    </div>
+  </div>
+</template>
+
+<style>
+.odometer-ribbon-inner {
+  -webkit-transition: -webkit-transform 200ms !important;
+  -moz-transition: -moz-transform 200ms !important;
+  -ms-transition: -ms-transform 200ms !important;
+  -o-transition: -o-transform 200ms !important;
+  transition: transform 200ms !important;
+}
+</style>
