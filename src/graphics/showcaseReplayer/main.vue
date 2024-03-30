@@ -34,12 +34,21 @@ socket.onmessage = (event) => {
     replayerName.value = '...';
   }
   if (data.resultsScreen.mods.str !== undefined) {
+    if (data.resultsScreen.mods.str.length > 8) {
+      mods.value = '...';
+      return;
+    }
+
     // remove V2 and NF from mods
     const formattedString = data.resultsScreen.mods.str
       .replace('V2', '')
       .replace('NF', '');
 
-    mods.value = formattedString;
+    if (formattedString === '') {
+      mods.value = 'NM';
+    } else {
+      mods.value = formattedString;
+    }
   } else {
     mods.value = '...';
   }
