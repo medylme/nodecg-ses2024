@@ -138,9 +138,14 @@ socket.onmessage = (event) => {
           <h4 class="bg-[#051374] text-white text-3xl py-2 px-4 rounded-full">
             combo
           </h4>
-          <p class="text-3xl">
-            <Vue3Odometer format="d" class="o-text" :value="maxcombo" />x
-          </p>
+          <div class="flex flex-row gap-1">
+            <Vue3Odometer
+              format="d"
+              class="o-text text-3xl"
+              :value="maxcombo"
+            />
+            <p class="text-3xl">x</p>
+          </div>
         </div>
         <div class="flex flex-col gap-2 items-center justify-center">
           <h4
