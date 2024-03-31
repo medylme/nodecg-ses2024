@@ -68,16 +68,20 @@ socket.onmessage = (event) => {
             'text-white': !k1Pressed,
           }"
         >
+          <p class="text-lg font-bold" v-if="k1Value === 0">K1</p>
           <Vue3Odometer
+            v-else
             format="d"
             class="o-text transition-colors duration-200 text-lg font-black"
             :value="k1Value"
           />
           <div
-            class="w-[2rem] h-[3px] -translate-y-0.5 transition-colors duration-25 rounded-full"
+            class="w-[2rem] h-[3px] transition-colors duration-25 rounded-full"
             :class="{
               'bg-[#ffe000]': k1Pressed,
               'bg-white': !k1Pressed,
+              '-translate-y-[1px]': k1Value === 0,
+              'translate-y-[-2px]': k1Value !== 0,
             }"
           ></div>
         </div>
@@ -88,7 +92,9 @@ socket.onmessage = (event) => {
             'text-white': !k2Pressed,
           }"
         >
+          <p class="text-lg font-bold" v-if="k2Value === 0">K2</p>
           <Vue3Odometer
+            v-else
             format="d"
             class="o-text transition-colors duration-200 text-lg font-black"
             :value="k2Value"
@@ -98,6 +104,8 @@ socket.onmessage = (event) => {
             :class="{
               'bg-[#ffe000]': k2Pressed,
               'bg-white': !k2Pressed,
+              '-translate-y-[1px]': k2Value === 0,
+              'translate-y-[-2px]': k2Value !== 0,
             }"
           ></div>
         </div>
@@ -108,7 +116,9 @@ socket.onmessage = (event) => {
             'text-white': !m1Pressed,
           }"
         >
+          <p class="text-lg font-bold" v-if="m1Value === 0">M1</p>
           <Vue3Odometer
+            v-else
             format="d"
             class="o-text transition-colors duration-200 text-lg font-black"
             :value="m1Value"
@@ -118,6 +128,8 @@ socket.onmessage = (event) => {
             :class="{
               'bg-[#ffe000]': m1Pressed,
               'bg-white': !m1Pressed,
+              '-translate-y-[1px]': m1Value === 0,
+              'translate-y-[-2px]': m1Value !== 0,
             }"
           ></div>
         </div>
@@ -128,7 +140,9 @@ socket.onmessage = (event) => {
             'text-white': !m2Pressed,
           }"
         >
+          <p class="text-lg font-bold" v-if="m2Value === 0">M2</p>
           <Vue3Odometer
+            v-else
             format="d"
             class="o-text transition-colors duration-200 text-lg font-black"
             :value="m2Value"
@@ -138,6 +152,8 @@ socket.onmessage = (event) => {
             :class="{
               'bg-[#ffe000]': m2Pressed,
               'bg-white': !m2Pressed,
+              '-translate-y-[1px]': m2Value === 0,
+              'translate-y-[-2px]': m2Value !== 0,
             }"
           ></div>
         </div>
