@@ -7,7 +7,7 @@ import 'odometer/themes/odometer-theme-default.css';
 import { ref } from 'vue';
 
 // values
-const keyOverlayVisible = ref(false);
+const overlayVisible = ref(false);
 
 const k1Pressed = ref(false);
 const k2Pressed = ref(false);
@@ -26,11 +26,9 @@ socket.onmessage = (event) => {
 
   // hide menu if not playing
   if (data.menu.state !== 2) {
-    keyOverlayVisible.value = false;
+    overlayVisible.value = false;
     return;
   }
-
-  keyOverlayVisible.value = true;
 
   if (data.gameplay.keyOverlay !== undefined) {
     k1Pressed.value = data.gameplay.keyOverlay.k1.isPressed;
@@ -45,16 +43,27 @@ socket.onmessage = (event) => {
     m2Pressed.value = data.gameplay.keyOverlay.m2.isPressed;
     m2Value.value = data.gameplay.keyOverlay.m2.count;
   }
+
+  if (
+    data.gameplay.combo !== undefined &&
+    data.gameplay.accuracy !== undefined
+  ) {
+    if (data.gameplay.combo.current === 0 && data.gameplay.accuracy === 0) {
+      overlayVisible.value = false;
+    } else {
+      overlayVisible.value = true;
+    }
+  }
 };
 </script>
 
 <template>
   <div
     id="container"
-    class="column q-ma-lg items-center justify-center transition-opacity duration-250"
+    class="column q-ma-lg items-center justify-center transition-all duration-[50ms]0 ease-in-out"
     :class="{
-      'opacity-100': keyOverlayVisible,
-      'opacity-0': !keyOverlayVisible,
+      'translate-y-0': overlayVisible,
+      'translate-y-20': !overlayVisible,
     }"
   >
     <div class="flex gap-2 items-center justify-center">
@@ -62,7 +71,7 @@ socket.onmessage = (event) => {
         class="flex flex-row gap-2 items-center justify-center bg-[#051372] py-2 px-5 rounded-full"
       >
         <div
-          class="flex flex-col items-center justify-center transition-transform duration-25"
+          class="flex flex-col items-center justify-center transition-all duration-[50ms]"
           :class="{
             'text-[#ffe000] scale-90': k1Pressed,
             'text-white': !k1Pressed,
@@ -76,7 +85,7 @@ socket.onmessage = (event) => {
             :value="k1Value"
           />
           <div
-            class="w-[2rem] h-[3px] transition-colors duration-25 rounded-full"
+            class="w-[2rem] h-[3px] transition-colors duration-100 rounded-full"
             :class="{
               'bg-[#ffe000]': k1Pressed,
               'bg-white': !k1Pressed,
@@ -86,7 +95,7 @@ socket.onmessage = (event) => {
           ></div>
         </div>
         <div
-          class="flex flex-col items-center justify-center transition-transform duration-25"
+          class="flex flex-col items-center justify-center transition-all duration-[50ms]"
           :class="{
             'text-[#ffe000] scale-90': k2Pressed,
             'text-white': !k2Pressed,
@@ -100,7 +109,7 @@ socket.onmessage = (event) => {
             :value="k2Value"
           />
           <div
-            class="w-[2rem] h-[3px] -translate-y-0.5 transition-colors duration-25 rounded-full"
+            class="w-[2rem] h-[3px] transition-colors duration-100 rounded-full"
             :class="{
               'bg-[#ffe000]': k2Pressed,
               'bg-white': !k2Pressed,
@@ -110,7 +119,7 @@ socket.onmessage = (event) => {
           ></div>
         </div>
         <div
-          class="flex flex-col items-center justify-center transition-transform duration-25"
+          class="flex flex-col items-center justify-center transition-all duration-[50ms]"
           :class="{
             'text-[#ffe000] scale-90': m1Pressed,
             'text-white': !m1Pressed,
@@ -124,7 +133,7 @@ socket.onmessage = (event) => {
             :value="m1Value"
           />
           <div
-            class="w-[2rem] h-[3px] -translate-y-0.5 transition-colors duration-25 rounded-full"
+            class="w-[2rem] h-[3px] transition-colors duration-100 rounded-full"
             :class="{
               'bg-[#ffe000]': m1Pressed,
               'bg-white': !m1Pressed,
@@ -134,7 +143,7 @@ socket.onmessage = (event) => {
           ></div>
         </div>
         <div
-          class="flex flex-col items-center justify-center transition-transform duration-25"
+          class="flex flex-col items-center justify-center transition-all duration-[50ms]"
           :class="{
             'text-[#ffe000] scale-90': m2Pressed,
             'text-white': !m2Pressed,
@@ -148,7 +157,7 @@ socket.onmessage = (event) => {
             :value="m2Value"
           />
           <div
-            class="w-[2rem] h-[3px] -translate-y-0.5 transition-colors duration-25 rounded-full"
+            class="w-[2rem] h-[3px] transition-colors duration-100 rounded-full"
             :class="{
               'bg-[#ffe000]': m2Pressed,
               'bg-white': !m2Pressed,

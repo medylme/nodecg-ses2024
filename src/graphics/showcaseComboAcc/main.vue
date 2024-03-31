@@ -63,10 +63,10 @@ socket.onmessage = (event) => {
 <template>
   <div
     id="container"
-    class="flex items-center justify-center transition-opacity duration-250"
+    class="flex items-center justify-center transition-all duration-1000 ease-in-out"
     :class="{
-      'opacity-100': overlayVisible,
-      'opacity-0': !overlayVisible,
+      'translate-y-4': overlayVisible,
+      '-translate-y-20': !overlayVisible,
     }"
   >
     <div class="flex flex-row gap-4 items-center justify-center">
