@@ -24,8 +24,6 @@ socket.onmessage = (event) => {
     return;
   }
 
-  overlayVisible.value = true;
-
   if (data.gameplay.combo !== undefined) {
     currentCombo.value = data.gameplay.combo.current;
   }
@@ -33,6 +31,11 @@ socket.onmessage = (event) => {
     const stringValue = data.gameplay.accuracy.toString();
     if (data.gameplay.accuracy === 100) {
       currentAccWhole.value = 100;
+      currentAccDecimal.value = 0;
+      return;
+    }
+    if (data.gameplay.accuracy === 0) {
+      currentAccWhole.value = 0;
       currentAccDecimal.value = 0;
       return;
     }
@@ -47,6 +50,12 @@ socket.onmessage = (event) => {
 
     currentAccWhole.value = whole;
     currentAccDecimal.value = decimal;
+  }
+
+  if (currentCombo.value === 0 && currentAccWhole.value === 0) {
+    overlayVisible.value = false;
+  } else {
+    overlayVisible.value = true;
   }
 };
 </script>
@@ -83,7 +92,7 @@ socket.onmessage = (event) => {
           <div
             class="flex flex-row items-start justify-center"
             :class="{
-              hidden: currentAccWhole === 100,
+              hidden: currentAccWhole === 100 || currentAccWhole === 0,
             }"
           >
             <p>.</p>
@@ -101,6 +110,9 @@ socket.onmessage = (event) => {
 </template>
 
 <style>
+.invis {
+  opacity: 0;
+}
 .odometer-ribbon-inner {
   -webkit-transition: -webkit-transform 200ms !important;
   -moz-transition: -moz-transform 200ms !important;
