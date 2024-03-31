@@ -14,7 +14,8 @@ const amount100 = ref(0);
 const amount50 = ref(0);
 const misses = ref(0);
 const maxcombo = ref(0);
-const acc = ref(0);
+const accWhole = ref(0);
+const accDecimal = ref(0);
 const score = ref(0);
 const scoreV1String = ref('');
 
@@ -76,7 +77,14 @@ socket.onmessage = (event) => {
     const accFormulaBottom =
       300 * (amount300.value + amount100.value + amount50.value + misses.value);
     const accFormula = (accFormulaTop / accFormulaBottom) * 100;
-    acc.value = Number(accFormula.toFixed(2));
+
+    const stringValue = accFormula.toFixed(2).toString();
+    const split = stringValue.split('.');
+    const whole = parseInt(split[0], 10);
+    const decimal = parseInt(split[1], 10);
+
+    accWhole.value = whole;
+    accDecimal.value = decimal;
   }
   if (!data.resultsScreen.mods.str.includes('V2')) {
     scoreV1String.value = '(V1)';
@@ -153,7 +161,33 @@ socket.onmessage = (event) => {
           >
             acc
           </h4>
-          <p class="text-3xl"><Vue3Odometer class="o-text" :value="acc" />%</p>
+          <div class="text-3xl">
+            <div
+              class="flex flex-row gap-1 items-center justify-center text-white text-3xl"
+            >
+              <div class="flex flex-row items-center justify-center">
+                <Vue3Odometer
+                  format="d"
+                  class="o-text transition-colors duration-200"
+                  :value="accWhole"
+                />
+                <div
+                  class="flex flex-row items-start justify-center"
+                  :class="{
+                    hidden: accWhole === 100 || accWhole === 0,
+                  }"
+                >
+                  <p>.</p>
+                  <Vue3Odometer
+                    format="d"
+                    class="o-text transition-colors duration-200"
+                    :value="accDecimal"
+                  />
+                </div>
+              </div>
+              <p>%</p>
+            </div>
+          </div>
         </div>
       </div>
       <div class="flex flex-row items-center justify-center gap-8">
