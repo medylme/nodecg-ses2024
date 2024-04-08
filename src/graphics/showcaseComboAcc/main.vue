@@ -11,7 +11,8 @@ const overlayVisible = ref(false);
 
 const currentCombo = ref(0);
 const currentAccWhole = ref(0);
-const currentAccDecimal = ref(0);
+const currentAccDecimalOne = ref(0);
+const currentAccDecimalTwo = ref(0);
 
 // gosumemory websocket
 const socket = new ReconnectingWebSocket('ws://localhost:24050/ws');
@@ -31,25 +32,26 @@ socket.onmessage = (event) => {
     const stringValue = data.gameplay.accuracy.toString();
     if (data.gameplay.accuracy === 100) {
       currentAccWhole.value = 100;
-      currentAccDecimal.value = 0;
+      currentAccDecimalOne.value = 0;
       return;
     }
     if (data.gameplay.accuracy === 0) {
       currentAccWhole.value = 0;
-      currentAccDecimal.value = 0;
+      currentAccDecimalOne.value = 0;
       return;
     }
 
     const split = stringValue.split('.');
     const whole = parseInt(split[0], 10);
-    let decimal = parseInt(split[1], 10);
-    // assure decimals are always 2 digits
-    if (decimal < 10) {
-      decimal *= 10;
-    }
+    const decimalString = split[1];
 
     currentAccWhole.value = whole;
-    currentAccDecimal.value = decimal;
+    currentAccDecimalOne.value = parseInt(decimalString[0], 10);
+    if (decimalString.length === 1) {
+      currentAccDecimalTwo.value = 0;
+    } else {
+      currentAccDecimalTwo.value = parseInt(decimalString[1], 10);
+    }
   }
 
   if (currentCombo.value === 0 && currentAccWhole.value === 0) {
@@ -99,7 +101,12 @@ socket.onmessage = (event) => {
             <Vue3Odometer
               format="d"
               class="o-text transition-colors duration-200"
-              :value="currentAccDecimal"
+              :value="currentAccDecimalOne"
+            />
+            <Vue3Odometer
+              format="d"
+              class="o-text transition-colors duration-200"
+              :value="currentAccDecimalTwo"
             />
           </div>
         </div>
