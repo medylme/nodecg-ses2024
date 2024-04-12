@@ -42,6 +42,7 @@ const pools = {
     'RD2',
     'RD3',
     'RD4',
+    'TB',
   ],
   QF: [
     'AM1',
@@ -58,6 +59,7 @@ const pools = {
     'RD2',
     'RD3',
     'RD4',
+    'TB',
   ],
   SF: [
     'AM1',
@@ -75,6 +77,7 @@ const pools = {
     'RD2',
     'RD3',
     'RD4',
+    'TB',
   ],
   F: [
     'AM1',
@@ -95,6 +98,7 @@ const pools = {
     'RD3',
     'RD4',
     'RD5',
+    'TB',
   ],
   GF: [
     'AM1',
@@ -115,6 +119,7 @@ const pools = {
     'RD3',
     'RD4',
     'RD5',
+    'TB',
   ],
 };
 const poolOptions = Object.keys(pools).map((pool) => ({
@@ -198,7 +203,7 @@ const selectedMap = ref(Replicants.currentMapReplicant?.data as string);
         stack-label
       />
       <br />
-      <QExpansionItem expand-seperator label="Slot">
+      <QExpansionItem expand-seperator label="Showcase Slot">
         <ul class="column">
           <li v-for="map in pools[selectedPool]" :key="map">
             <QRadio v-model="selectedMap" :val="map" :label="map" />
