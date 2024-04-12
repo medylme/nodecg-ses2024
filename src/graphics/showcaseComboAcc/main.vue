@@ -43,14 +43,21 @@ socket.onmessage = (event) => {
 
     const split = stringValue.split('.');
     const whole = parseInt(split[0], 10);
-    const decimalString = split[1];
-
     currentAccWhole.value = whole;
-    currentAccDecimalOne.value = parseInt(decimalString[0], 10);
-    if (decimalString.length === 1) {
-      currentAccDecimalTwo.value = 0;
+
+    const decimalString = split[1];
+    if (decimalString) {
+      // has decimals
+      currentAccDecimalOne.value = parseInt(decimalString[0], 10);
+      if (decimalString.length === 1) {
+        currentAccDecimalTwo.value = 0;
+      } else {
+        currentAccDecimalTwo.value = parseInt(decimalString[1], 10);
+      }
     } else {
-      currentAccDecimalTwo.value = parseInt(decimalString[1], 10);
+      // no decimals
+      currentAccDecimalOne.value = 0;
+      currentAccDecimalTwo.value = 0;
     }
   }
 
